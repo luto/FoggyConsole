@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace FoggyConsole.Controls
 {
@@ -37,19 +36,33 @@ namespace FoggyConsole.Controls
         /// <returns>
         /// The element at the specified index.
         /// </returns>
-        /// <param name="index">The zero-based index of the element to get or set.</param><exception cref="T:System.ArgumentOutOfRangeException"><paramref name="index"/> is not a valid index in the <see cref="T:System.Collections.Generic.IList`1"/>.</exception><exception cref="T:System.NotSupportedException">The property is set and the <see cref="T:System.Collections.Generic.IList`1"/> is read-only.</exception>
+        /// <param name="index">The zero-based index of the element to get or set.</param>
+        /// <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="index"/> is not a valid index in the <see cref="T:System.Collections.Generic.IList`1"/>.</exception>
+        /// <exception cref="T:System.NotSupportedException">The property is set and the <see cref="T:System.Collections.Generic.IList`1"/> is read-only.</exception>
         public Control this[int index]
         {
             get { return _controls[index]; }
             set { _controls[index] = value; }
         }
 
+        /// <summary>
+        /// Gets the element with the specified name.
+        /// </summary>
+        /// <returns>
+        /// The element with the specified name.
+        /// </returns>
+        /// <param name="name">The name of the element to get.</param>
         public Control this[string name]
         {
             get { return GetByName(name); }
         }
         #endregion
 
+        /// <summary>
+        /// Creates a new <code>ContainerControl</code>
+        /// </summary>
+        /// <param name="drawer"></param>
+        /// <exception cref="ArgumentException">Thrown if the ControlDrawer which should be set already has an other Control assigned</exception>
         public ContainerControl(ControlDrawer drawer)
             : base(drawer)
         {
@@ -129,6 +142,11 @@ namespace FoggyConsole.Controls
             return _controls.Remove(item);
         }
 
+        /// <summary>
+        /// Removes the element with the name <paramref name="name"/>
+        /// </summary>
+        /// <param name="name">The name of the element to remove</param>
+        /// <returns>true if the element has been removed, otherwise false</returns>
         public bool RemoveByName(string name)
         {
             var index = FindByName(name);
@@ -139,7 +157,7 @@ namespace FoggyConsole.Controls
             return true;
         }
 
-        public Control GetByName(string name)
+        private Control GetByName(string name)
         {
             var index = FindByName(name);
             if (index == -1)

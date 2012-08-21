@@ -2,5 +2,6 @@
 bin
 obj
 _ReSharper.FoggyConsole
-*.user
+*.DotSettings.user
 *.suo
+*.userprefs

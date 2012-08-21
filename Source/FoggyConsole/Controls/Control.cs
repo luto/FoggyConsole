@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace FoggyConsole.Controls
 {
@@ -47,7 +46,7 @@ namespace FoggyConsole.Controls
         /// <summary>
         /// An instance of a subclass of <code>ControlDrawer</code> which is able to draw this specific type of Control
         /// </summary>
-        /// <exception cref="ArgumentException">Thrown if the ControlDrawer which should be set already has a Control assigned</exception>
+        /// <exception cref="ArgumentException">Thrown if the ControlDrawer which should be set already has an other Control assigned</exception>
         public ControlDrawer Drawer
         {
             get { return _drawer; }
@@ -59,7 +58,11 @@ namespace FoggyConsole.Controls
             }
         }
 
-        
+        /// <summary>
+        /// Creates a new <code>Control</code>
+        /// </summary>
+        /// <param name="drawer">The <code>ControlDrawer</code> to set</param>
+        /// <exception cref="ArgumentException">Thrown if the ControlDrawer which should be set already has an other Control assigned</exception>
         public Control(ControlDrawer drawer)
         {
             Drawer = drawer;

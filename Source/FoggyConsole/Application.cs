@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 using FoggyConsole.Controls;
 
@@ -16,6 +14,9 @@ namespace FoggyConsole
     /// </summary>
     public class Application
     {
+        /// <summary>
+        /// The root of the Control-Tree
+        /// </summary>
         public ContainerControl RootContainer { get; private set; }
         private Control _focusedControl;
 
@@ -45,7 +46,7 @@ namespace FoggyConsole
         {
             while (true)
             {
-                RootContainer.Drawer.Draw(0, 0);
+                RootContainer.Drawer.Draw(0, 0, new Rectangle(0, 0, Console.WindowHeight, Console.WindowWidth));
                 var input = GetUserInput();
                 if(input.HasValue)
                 {

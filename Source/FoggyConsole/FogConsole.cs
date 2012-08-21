@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace FoggyConsole
 {
@@ -26,10 +25,23 @@ namespace FoggyConsole
         /// <param name="left">Distance from the left edge of the window in characters</param>
         /// <param name="top">Distance from the top edge of the window in characters</param>
         /// <param name="o">The object to write</param>
+        /// <param name="boundary">The boundary to draw in, nothing will be drawn outside this area</param>
         /// <param name="fColor">The foreground color to set</param>
         /// <param name="bColor">The background color to set</param>
-        public static void Write(int left, int top, object o, ConsoleColor fColor = ConsoleColor.Gray, ConsoleColor bColor = ConsoleColor.Black)
+        public static void Write(int left, int top, object o, Rectangle boundary = null, ConsoleColor fColor = ConsoleColor.Gray, ConsoleColor bColor = ConsoleColor.Black)
         {
+            var str = o.ToString();
+            if (boundary != null)
+            {
+                int lastCharLeft = left + str.Length;
+                int lastAllowedCharLeft = boundary.Left + boundary.Width;
+
+                if (left > lastAllowedCharLeft) // string is complitly out of view
+                    return;
+                if (lastCharLeft > lastAllowedCharLeft) // string is partially out of view
+                    str = str.Substring(0, boundary.Width - (left - boundary.Left));
+            }
+
             // check for changed values, only set what is needed (huge performance plus)
             if (left != _left)
                 Console.CursorLeft = left;
@@ -40,7 +52,6 @@ namespace FoggyConsole
             if (bColor != _bColor)
                 Console.BackgroundColor = bColor;
 
-            var str = o.ToString();
             Console.Write(str);
 
             // remember the set values
@@ -51,6 +62,44 @@ namespace FoggyConsole
             _top = top;
             _fColor = fColor;
             _bColor = bColor;
+        }
+    }
+
+    /// <summary>
+    /// A very basic represenation of a rectangle
+    /// </summary>
+    public class Rectangle
+    {
+        /// <summary>
+        /// This rectangles distance from the left edge in characters
+        /// </summary>
+        public int Left { get; set; }
+        /// <summary>
+        /// This rectangles distance from the top edge in characters
+        /// </summary>
+        public int Top { get; set; }
+        /// <summary>
+        /// This rectangles height in characters
+        /// </summary>
+        public int Height { get; set; }
+        /// <summary>
+        /// This rectangles width in characters
+        /// </summary>
+        public int Width { get; set; }
+
+        /// <summary>
+        /// Creates a new rectangle
+        /// </summary>
+        /// <param name="left">The left value to set</param>
+        /// <param name="top">The top value to set</param>
+        /// <param name="height">The height value to set</param>
+        /// <param name="width">The width value to set</param>
+        public Rectangle(int left, int top, int height, int width)
+        {
+            this.Left = left;
+            this.Top = top;
+            this.Height = height;
+            this.Width = width;
         }
     }
 }

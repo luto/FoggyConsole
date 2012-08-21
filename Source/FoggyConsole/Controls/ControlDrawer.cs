@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace FoggyConsole.Controls
 {
@@ -43,6 +42,7 @@ namespace FoggyConsole.Controls
         /// </summary>
         /// <param name="leftOffset">Offset for the left value (used to convert local coordinates within a container to global ones)</param>
         /// <param name="topOffset">Offset for the top value (used to convert local coordinates within a container to global ones)</param>
-        public abstract void Draw(int leftOffset, int topOffset);
+        /// <param name="boundary">The boundary of the <code>ContainerControl</code> in which the <code>Control</code> is placed</param>
+        public abstract void Draw(int leftOffset, int topOffset, Rectangle boundary);
     }
 }

@@ -33,10 +33,14 @@ namespace FoggyConsole.Controls
         public int Height { get; set; }
         
         /// <summary>
-        /// The name of this Control
-        /// This must be unique within its Container
+        /// The name of this Control, must be unique within its Container
         /// </summary>
         public string Name { get; set; }
+
+        /// <summary>
+        /// Used to determine the order of controls when the user uses the TAB-key navigate between them
+        /// </summary>
+        public int TabIndex { get; set; }
 
         /// <summary>
         /// The <code>ContainerControl</code> in which this Control is placed in

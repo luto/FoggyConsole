@@ -40,31 +40,16 @@ namespace FoggyConsole
 
         /// <summary>
         /// Starts this <code>Application</code>.
-        /// This call blocks until the Application has ended.
         /// </summary>
         public void Run()
         {
-            while (true)
-            {
-                RootContainer.Drawer.Draw(0, 0, new Rectangle(0, 0, Console.WindowHeight, Console.WindowWidth));
-                var input = GetUserInput();
-                if(input.HasValue)
-                {
-                    HandleUserInput(input.Value);
-                }
-            }
+            RootContainer.Drawer.Draw(0, 0, new Rectangle(0, 0, Console.WindowHeight, Console.WindowWidth));
+            KeyWatcher.KeyPressed += KeyWatcherOnKeyPressed;
         }
 
-        private ConsoleKeyInfo? GetUserInput()
+        private void KeyWatcherOnKeyPressed(object sender, KeyPressedEventArgs eventArgs)
         {
-            if (Console.KeyAvailable)
-                return Console.ReadKey(true);
-            return null;
-        }
-
-        private void HandleUserInput(ConsoleKeyInfo value)
-        {
-            throw new NotImplementedException();
+            FogConsole.Write(0, Console.WindowHeight - 1, "You pressed: " + eventArgs.KeyInfo.KeyChar, null, ConsoleColor.DarkGray);
         }
     }
 }

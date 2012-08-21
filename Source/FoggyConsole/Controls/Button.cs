@@ -10,7 +10,7 @@ namespace FoggyConsole.Controls
     /// The standard look is: <example>[ Button Name ]</example> (drawn by <code>ButtonDrawer</code>).
     /// If no Width is set the button will use as much space as required.
     /// </summary>
-    public class Button : Control
+    public class Button : Control, IInputHandler
     {
         private ButtonDrawer ButtonDrawer { get { return Drawer as ButtonDrawer; } }
 
@@ -39,6 +39,16 @@ namespace FoggyConsole.Controls
                 base.Drawer = new ButtonDrawer(this);
 
             this.Text = text;
+        }
+
+        bool IInputHandler.HandleKeyInput(ConsoleKeyInfo keyInfo)
+        {
+            if(keyInfo.Key == ConsoleKey.Spacebar)
+            {
+
+                return true;
+            }
+            return false;
         }
     }
 

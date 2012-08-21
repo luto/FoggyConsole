@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FoggyConsole", "FoggyConsole\FoggyConsole.csproj", "{232E460F-DAE6-4578-B3E4-7CC3444DB376}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{232E460F-DAE6-4578-B3E4-7CC3444DB376}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{232E460F-DAE6-4578-B3E4-7CC3444DB376}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{232E460F-DAE6-4578-B3E4-7CC3444DB376}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{232E460F-DAE6-4578-B3E4-7CC3444DB376}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

@@ -15,6 +15,11 @@ namespace FoggyConsole
     public class Application
     {
         /// <summary>
+        /// Enables some debugging options, such as drawing panels with background and displaying pressed keys
+        /// </summary>
+        public static bool DEBUG_MODE = true;
+
+        /// <summary>
         /// The root of the Control-Tree
         /// </summary>
         public ContainerControl RootContainer { get; private set; }
@@ -49,7 +54,29 @@ namespace FoggyConsole
 
         private void KeyWatcherOnKeyPressed(object sender, KeyPressedEventArgs eventArgs)
         {
-            FogConsole.Write(0, Console.WindowHeight - 1, "You pressed: " + eventArgs.KeyInfo.KeyChar, null, ConsoleColor.DarkGray);
+            if(DEBUG_MODE)
+                FogConsole.Write(0, Console.WindowHeight - 1, "Key pressed: " + eventArgs.KeyInfo.Key.ToString().PadRight(10), null, ConsoleColor.DarkGray);
+
+            if(_focusedControl is IInputHandler)
+            {
+                var handled = (_focusedControl as IInputHandler).HandleKeyInput(eventArgs.KeyInfo);
+                if(handled)
+                    return;
+            }
+
+            switch (eventArgs.KeyInfo.Key)
+            {
+                case ConsoleKey.Tab:
+                    break;
+                case ConsoleKey.UpArrow:
+                    break;
+                case ConsoleKey.DownArrow:
+                    break;
+                case ConsoleKey.LeftArrow:
+                    break;
+                case ConsoleKey.RightArrow:
+                    break;
+            }
         }
     }
 }

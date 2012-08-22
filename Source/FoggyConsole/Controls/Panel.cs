@@ -31,8 +31,9 @@ namespace FoggyConsole.Controls
     public class PanelDrawer : ControlDrawer
     {
         private Panel Panel { get { return Control as Panel; } }
+        private static ConsoleColor[] DEBUG_COLORS = new [] { ConsoleColor.Blue, ConsoleColor.Red, ConsoleColor.Green, ConsoleColor.Cyan, ConsoleColor.Yellow };
+        private static int DEBUG_COLOR_COUNTER = 0;
 
-        
         public PanelDrawer(Panel control)
             : base(control)
         {
@@ -47,7 +48,19 @@ namespace FoggyConsole.Controls
             leftOffset += Panel.Left;
             topOffset  += Panel.Top;
             
-            boundary = new Rectangle(Panel.Left, Panel.Top, Panel.Height, Panel.Width);
+            boundary = new Rectangle(leftOffset, topOffset, Panel.Height, Panel.Width);
+
+            if (Application.DEBUG_MODE)
+            {
+                FogConsole.DrawBox(boundary, new DrawCharacterSet(),
+                                   bColor: DEBUG_COLORS[DEBUG_COLOR_COUNTER],
+                                   bFillColor: DEBUG_COLORS[DEBUG_COLOR_COUNTER],
+                                   fill: true);
+                FogConsole.Write(leftOffset, topOffset, "{" + Panel.Name + "}", null, ConsoleColor.Black, DEBUG_COLORS[DEBUG_COLOR_COUNTER]);
+                DEBUG_COLOR_COUNTER++;
+                if (DEBUG_COLOR_COUNTER == DEBUG_COLORS.Length)
+                    DEBUG_COLOR_COUNTER = 0;
+            }
 
             foreach (var control in Panel)
             {

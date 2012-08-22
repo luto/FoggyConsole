@@ -20,7 +20,8 @@ namespace FoggyConsole
 
         /// <summary>
         /// Writes <paramref name="o"/> at (<paramref name="left"/>|<paramref name="top"/>)
-        /// sets the foreground color to <paramref name="fColor"/> (default: <code>System.ConsoleColor.Gray</code>) and the background color to <paramref name="bColor"/> (default: <code>System.ConsoleColor.Black</code>)
+        /// sets the foreground color to <paramref name="fColor"/> (default: <code>System.ConsoleColor.Gray</code>) and
+        /// the background color to <paramref name="bColor"/> (default: <code>System.ConsoleColor.Black</code>)
         /// </summary>
         /// <param name="left">Distance from the left edge of the window in characters</param>
         /// <param name="top">Distance from the top edge of the window in characters</param>
@@ -28,7 +29,8 @@ namespace FoggyConsole
         /// <param name="boundary">The boundary to draw in, nothing will be drawn outside this area</param>
         /// <param name="fColor">The foreground color to set</param>
         /// <param name="bColor">The background color to set</param>
-        public static void Write(int left, int top, object o, Rectangle boundary = null, ConsoleColor fColor = ConsoleColor.Gray, ConsoleColor bColor = ConsoleColor.Black)
+        public static void Write(int left, int top, object o, Rectangle boundary = null,
+                                 ConsoleColor fColor = ConsoleColor.Gray, ConsoleColor bColor = ConsoleColor.Black)
         {
             var str = o.ToString();
             if (boundary != null)
@@ -63,7 +65,49 @@ namespace FoggyConsole
             _fColor = fColor;
             _bColor = bColor;
         }
-    }
+
+        public static void DrawBox(Rectangle rect, DrawCharacterSet charSet,
+                                   ConsoleColor fColor = ConsoleColor.Gray, ConsoleColor bColor = ConsoleColor.Black,
+                                   bool fill = false, ConsoleColor fFillColor = ConsoleColor.Gray, ConsoleColor bFillColor = ConsoleColor.Black)
+        {
+            #region Corners
+            var topLine = charSet.TopLeftCorner + new string(charSet.HorizontalEdge, rect.Width - 2) + charSet.TopRightCorner;
+            var bottomLine = charSet.BottomLeftCorner + new string(charSet.HorizontalEdge, rect.Width - 2) + charSet.BottomRightCorner;
+
+            Write(rect.Left, rect.Top, topLine, null, fColor, bColor);
+            Write(rect.Left, rect.Top + rect.Height - 1, bottomLine, null, fColor, bColor);
+            #endregion
+
+            #region Left and right edge
+            string middleLine;
+            if (fColor == fFillColor && bColor == bFillColor)
+                middleLine = charSet.VerticalEdge + new string(charSet.Empty, rect.Width - 2) + charSet.VerticalEdge;
+            else
+                middleLine = new string(charSet.Empty, rect.Width - 2);
+            
+            for (int i = 1; i < rect.Height - 1; i++)
+            {
+                if (!fill || fColor != fFillColor || bColor == bFillColor)
+                {
+                    Write(rect.Left, rect.Top + i, charSet.VerticalEdge, null, fColor, bColor);
+                    Write(rect.Left + rect.Width - 1, rect.Top + i, charSet.VerticalEdge, null, fColor, bColor);
+                }
+                if(fill)
+                {
+                    if (fColor == fFillColor && bColor == bFillColor)
+                    {
+                        Write(rect.Left, rect.Top + i, middleLine, null, fColor, bColor);
+                    }
+                    else
+                    {
+                        Write(rect.Left + 1, rect.Top + i, middleLine, null, fFillColor, bFillColor);
+                    }
+                }
+            }
+            #endregion
+
+        }
+}
 
     /// <summary>
     /// A very basic represenation of a rectangle

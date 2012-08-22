@@ -5,19 +5,62 @@ using System.Text;
 
 namespace FoggyConsole
 {
+    /// <summary>
+    /// A set of characters which can be used to draw a box or complex lines
+    /// </summary>
     public class DrawCharacterSet
     {
+        /// <summary>
+        /// A character representing the top left corner of an rectangle
+        /// </summary>
         public char TopLeftCorner { get; set; }
+        /// <summary>
+        /// A character representing the top right corner of an rectangle
+        /// </summary>
         public char TopRightCorner { get; set; }
+        /// <summary>
+        /// A character representing the bottom left corner of an rectangle
+        /// </summary>
         public char BottomLeftCorner { get; set; }
+        /// <summary>
+        /// A character representing the bottom right corner of an rectangle
+        /// </summary>
         public char BottomRightCorner { get; set; }
+        /// <summary>
+        /// A character representing the a left or right edge of an rectangle
+        /// </summary>
         public char VerticalEdge { get; set; }
+        /// <summary>
+        /// A character representing the a top or bottom edge of an rectangle
+        /// </summary>
         public char HorizontalEdge { get; set; }
+        /// <summary>
+        /// A character representing a connection between a <code>HorizontalEdge</code> and a <code>VerticalEdge</code>,
+        /// in which the <code>VerticalEdge</code> is above the <code>HorizontalEdge</code>
+        /// </summary>
         public char ConnectionHorizontalUp { get; set; }
+        /// <summary>
+        /// A character representing a connection between a <code>HorizontalEdge</code> and a <code>VerticalEdge</code>,
+        /// in which the <code>VerticalEdge</code> is below the <code>HorizontalEdge</code>
+        /// </summary>
         public char ConnectionHorizontalDown { get; set; }
+        /// <summary>
+        /// A character representing a connection between a <code>VerticalEdge</code> and a <code>HorizontalEdge</code>,
+        /// in which the <code>HorizontalEdge</code> is on the left side of the <code>VerticalEdge</code>
+        /// </summary>
         public char ConnectionVerticalRight { get; set; }
+        /// <summary>
+        /// A character representing a connection between a <code>VerticalEdge</code> and a <code>HorizontalEdge</code>,
+        /// in which the <code>HorizontalEdge</code> is on the right side of the <code>VerticalEdge</code>
+        /// </summary>
         public char ConnectionVerticalLeft { get; set; }
+        /// <summary>
+        /// A characer representing a connection between two <code>VerticalEdge</code> and two <code>HorizontalEdge</code>
+        /// </summary>
         public char ConnectionCross { get; set; }
+        /// <summary>
+        /// A empty character which can be used to fill boxes
+        /// </summary>
         public char Empty { get; set; }
 
 

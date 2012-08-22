@@ -66,6 +66,18 @@ namespace FoggyConsole
             _bColor = bColor;
         }
 
+        /// <summary>
+        /// Draws a box using the characters given in <paramref name="charSet"/>.
+        /// The box will be filled with characters if <paramref name="fill"/> is true,
+        /// this is a hugh performance plus if <paramref name="fColor"/> equals <paramref name="fFillColor"/> and <paramref name="bColor"/> equals <paramref name="bFillColor"/>.
+        /// </summary>
+        /// <param name="rect">The dimensions of the box</param>
+        /// <param name="charSet">The characters to use to draw the box</param>
+        /// <param name="fColor">The foreground color of the edges</param>
+        /// <param name="bColor">The background color of the edges</param>
+        /// <param name="fill">true if the box should be filled, otherwise false</param>
+        /// <param name="fFillColor">The foreground color of the fill</param>
+        /// <param name="bFillColor">The background color of the fill</param>
         public static void DrawBox(Rectangle rect, DrawCharacterSet charSet,
                                    ConsoleColor fColor = ConsoleColor.Gray, ConsoleColor bColor = ConsoleColor.Black,
                                    bool fill = false, ConsoleColor fFillColor = ConsoleColor.Gray, ConsoleColor bFillColor = ConsoleColor.Black)
@@ -79,6 +91,17 @@ namespace FoggyConsole
             #endregion
 
             #region Left and right edge
+            // Drawing of left and right edges is optimized to call Console.Write as few as possible.
+            // This is only possible when the box should be filled and all fill-colors equals the edge-colors.
+            //     Fill = true
+            //         Colors same:
+            //             create a string which contains the whole line (edges and fill) => draw in one part
+            //         Colors different:
+            //             draw the line in 3 parts
+            //             TODO: draw edges with dummy chars in between + draw the actual filling afterwards (=> 2 parts instead of 3)
+            //     Fill = false
+            //         draw the line in 3 parts (existing characters which could be inside the box have to be preserved)
+
             string middleLine;
             if (fColor == fFillColor && bColor == bFillColor)
                 middleLine = charSet.VerticalEdge + new string(charSet.Empty, rect.Width - 2) + charSet.VerticalEdge;
@@ -105,7 +128,6 @@ namespace FoggyConsole
                 }
             }
             #endregion
-
         }
 }
 

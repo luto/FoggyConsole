@@ -26,6 +26,9 @@ namespace FoggyConsole
         /// The root of the Control-Tree
         /// </summary>
         public ContainerControl RootContainer { get; private set; }
+        /// <summary>
+        /// Responsible for focus-changes, for example when the user presses the TAB-key
+        /// </summary>
         public FocusManager FocusManager
         {
             get { return _focusManager; }

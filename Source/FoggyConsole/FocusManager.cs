@@ -7,20 +7,41 @@ using FoggyConsole.Controls;
 
 namespace FoggyConsole
 {
+    /// <summary>
+    /// Represents a class which can handle focus changed. The standard implementation is <code>FocusManager</code>
+    /// </summary>
     public interface IFocusManager : IInputHandler
     {
+        /// <summary>
+        /// The currently focused control
+        /// </summary>
         Control FocusedControl { get; }
+        /// <summary>
+        /// Keys which can be handled by this <code>IFocusManager</code>
+        /// </summary>
         ConsoleKey[] HandledKeys { get; }
     }
 
+    /// <summary>
+    /// Basic <code>IFocusManager</code> which just cycles through all controls when the user presses TAB
+    /// </summary>
     public class FocusManager : IFocusManager
     {
-        private static ConsoleKey[] _handledKeys = new [] { ConsoleKey.Tab };
+        private static readonly ConsoleKey[] _handledKeys = new [] { ConsoleKey.Tab };
 
+        /// <summary>
+        /// The currently focused control
+        /// </summary>
         public Control FocusedControl { get; private set; }
+        /// <summary>
+        /// Keys which can be handled by this <code>FocusManager</code>
+        /// </summary>
         public ConsoleKey[] HandledKeys { get { return _handledKeys; } }
 
-
+        /// <summary>
+        /// Creates a new FocusManager
+        /// </summary>
+        /// <param name="startControl"></param>
         public FocusManager(Control startControl)
         {
             FocusedControl = startControl;

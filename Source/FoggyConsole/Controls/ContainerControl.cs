@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
@@ -42,7 +43,11 @@ namespace FoggyConsole.Controls
         public Control this[int index]
         {
             get { return _controls[index]; }
-            set { _controls[index] = value; }
+            set
+            {
+                value.Container = this;
+                _controls[index] = value;
+            }
         }
 
         /// <summary>
@@ -77,6 +82,7 @@ namespace FoggyConsole.Controls
         /// A <see cref="T:System.Collections.Generic.IEnumerator`1"/> that can be used to iterate through the collection.
         /// </returns>
         /// <filterpriority>1</filterpriority>
+        [DebuggerStepThrough]
         public IEnumerator<Control> GetEnumerator()
         {
             return _controls.GetEnumerator();
@@ -100,6 +106,7 @@ namespace FoggyConsole.Controls
         /// <param name="item">The object to add to the <see cref="T:System.Collections.Generic.ICollection`1"/>.</param><exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Generic.ICollection`1"/> is read-only.</exception>
         public void Add(Control item)
         {
+            item.Container = this;
             _controls.Add(item);
         }
 

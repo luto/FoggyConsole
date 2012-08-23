@@ -47,20 +47,26 @@ namespace FoggyConsole.Controls
 
             leftOffset += Panel.Left;
             topOffset  += Panel.Top;
-            
-            boundary = new Rectangle(leftOffset, topOffset, Panel.Height, Panel.Width);
 
+            var oldBoundary = boundary;
+            boundary = new Rectangle(leftOffset, topOffset, Panel.Height, Panel.Width);
+            
             if (Application.DEBUG_MODE)
             {
-                FogConsole.DrawBox(boundary, new DrawCharacterSet(),
+                FogConsole.DrawBox(boundary, new DrawCharacterSet(), oldBoundary,
                                    bColor: DEBUG_COLORS[DEBUG_COLOR_COUNTER],
                                    bFillColor: DEBUG_COLORS[DEBUG_COLOR_COUNTER],
                                    fill: true);
-                FogConsole.Write(leftOffset, topOffset, "{" + Panel.Name + "}", null, ConsoleColor.Black, DEBUG_COLORS[DEBUG_COLOR_COUNTER]);
+                FogConsole.Write(leftOffset, topOffset, "{" + Panel.Name + "}", oldBoundary, ConsoleColor.Black, DEBUG_COLORS[DEBUG_COLOR_COUNTER]);
                 DEBUG_COLOR_COUNTER++;
                 if (DEBUG_COLOR_COUNTER == DEBUG_COLORS.Length)
                     DEBUG_COLOR_COUNTER = 0;
             }
+
+            if (boundary.Left + boundary.Width > oldBoundary.Left + oldBoundary.Width)
+                boundary.Width = oldBoundary.Width - (boundary.Left - oldBoundary.Left);
+            if (boundary.Top + boundary.Height > oldBoundary.Top + oldBoundary.Height)
+                boundary.Height = oldBoundary.Height - (boundary.Top - oldBoundary.Height);
 
             foreach (var control in Panel)
             {

@@ -73,12 +73,13 @@ namespace FoggyConsole
         /// </summary>
         /// <param name="rect">The dimensions of the box</param>
         /// <param name="charSet">The characters to use to draw the box</param>
+        /// <param name="boundary">The boundary to draw in, nothing will be drawn outside this area</param>
         /// <param name="fColor">The foreground color of the edges</param>
         /// <param name="bColor">The background color of the edges</param>
         /// <param name="fill">true if the box should be filled, otherwise false</param>
         /// <param name="fFillColor">The foreground color of the fill</param>
         /// <param name="bFillColor">The background color of the fill</param>
-        public static void DrawBox(Rectangle rect, DrawCharacterSet charSet,
+        public static void DrawBox(Rectangle rect, DrawCharacterSet charSet, Rectangle boundary = null,
                                    ConsoleColor fColor = ConsoleColor.Gray, ConsoleColor bColor = ConsoleColor.Black,
                                    bool fill = false, ConsoleColor fFillColor = ConsoleColor.Gray, ConsoleColor bFillColor = ConsoleColor.Black)
         {
@@ -86,8 +87,17 @@ namespace FoggyConsole
             var topLine = charSet.TopLeftCorner + new string(charSet.HorizontalEdge, rect.Width - 2) + charSet.TopRightCorner;
             var bottomLine = charSet.BottomLeftCorner + new string(charSet.HorizontalEdge, rect.Width - 2) + charSet.BottomRightCorner;
 
+            if(boundary != null && topLine.Length + rect.Left > boundary.Left + boundary.Width)
+            {
+                var charsInside = boundary.Width - (rect.Left - boundary.Left);
+                topLine = topLine.Substring(0, charsInside);
+                bottomLine = bottomLine.Substring(0, charsInside);
+            }
+
             Write(rect.Left, rect.Top, topLine, null, fColor, bColor);
-            Write(rect.Left, rect.Top + rect.Height - 1, bottomLine, null, fColor, bColor);
+            var bottomLineTop = rect.Top + rect.Height - 1;
+            if(boundary != null && bottomLineTop < boundary.Top + boundary.Height)
+            Write(rect.Left, bottomLineTop, bottomLine, null, fColor, bColor);
             #endregion
 
             #region Left and right edge
@@ -107,13 +117,29 @@ namespace FoggyConsole
                 middleLine = charSet.VerticalEdge + new string(charSet.Empty, rect.Width - 2) + charSet.VerticalEdge;
             else
                 middleLine = new string(charSet.Empty, rect.Width - 2);
-            
-            for (int i = 1; i < rect.Height - 1; i++)
+
+            if (boundary != null &&
+                middleLine.Length + rect.Left > boundary.Left + boundary.Width &&
+                (fColor == fFillColor && bColor == bFillColor))
+            {
+                var charsInside = boundary.Width - (rect.Left - boundary.Left);
+                middleLine = middleLine.Substring(0, charsInside);
+            }
+
+            var middleHeight = rect.Height - 1;
+            if (boundary != null && rect.Top + middleHeight > boundary.Top + boundary.Height)
+            {
+                middleHeight = boundary.Height - (rect.Top - boundary.Top);
+            }
+
+            for (int i = 1; i < middleHeight; i++)
             {
                 if (!fill || fColor != fFillColor || bColor == bFillColor)
                 {
                     Write(rect.Left, rect.Top + i, charSet.VerticalEdge, null, fColor, bColor);
-                    Write(rect.Left + rect.Width - 1, rect.Top + i, charSet.VerticalEdge, null, fColor, bColor);
+                    var left = rect.Left + rect.Width - 1;
+                    if(boundary != null && left < boundary.Left + boundary.Width)
+                        Write(left, rect.Top + i, charSet.VerticalEdge, null, fColor, bColor);
                 }
                 if(fill)
                 {

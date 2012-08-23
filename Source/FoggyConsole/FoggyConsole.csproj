@@ -51,6 +51,7 @@
     <Compile Include="Controls\IInputHandler.cs" />
     <Compile Include="Controls\Panel.cs" />
     <Compile Include="DrawCharacterSet.cs" />
+    <Compile Include="FocusManager.cs" />
     <Compile Include="FogConsole.cs" />
     <Compile Include="KeyWatcher.cs" />
     <Compile Include="Test\Program.cs" />

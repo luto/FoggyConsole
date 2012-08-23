@@ -18,12 +18,24 @@ namespace FoggyConsole
         /// Enables some debugging options, such as drawing panels with background and displaying pressed keys
         /// </summary>
         public static bool DEBUG_MODE = true;
+        
+        private bool _running = false;
+        private FocusManager _focusManager;
 
         /// <summary>
         /// The root of the Control-Tree
         /// </summary>
         public ContainerControl RootContainer { get; private set; }
-        private Control _focusedControl;
+        public FocusManager FocusManager
+        {
+            get { return _focusManager; }
+            set
+            {
+                if(_running)
+                    throw new InvalidOperationException("The FocusManager can't be changed once the Application has been started.");
+                _focusManager = value;
+            }
+        }
 
 
         /// <summary>
@@ -48,6 +60,7 @@ namespace FoggyConsole
         /// </summary>
         public void Run()
         {
+            _running = true;
             RootContainer.Drawer.Draw(0, 0, new Rectangle(0, 0, Console.WindowHeight, Console.WindowWidth));
             KeyWatcher.KeyPressed += KeyWatcherOnKeyPressed;
         }
@@ -57,25 +70,11 @@ namespace FoggyConsole
             if(DEBUG_MODE)
                 FogConsole.Write(0, Console.WindowHeight - 1, "Key pressed: " + eventArgs.KeyInfo.Key.ToString().PadRight(10), null, ConsoleColor.DarkGray);
 
-            if(_focusedControl is IInputHandler)
+            if(FocusManager != null && FocusManager.HandledKeys.Contains(eventArgs.KeyInfo.Key))
             {
-                var handled = (_focusedControl as IInputHandler).HandleKeyInput(eventArgs.KeyInfo);
-                if(handled)
-                    return;
-            }
-
-            switch (eventArgs.KeyInfo.Key)
-            {
-                case ConsoleKey.Tab:
-                    break;
-                case ConsoleKey.UpArrow:
-                    break;
-                case ConsoleKey.DownArrow:
-                    break;
-                case ConsoleKey.LeftArrow:
-                    break;
-                case ConsoleKey.RightArrow:
-                    break;
+                FocusManager.HandleKeyInput(eventArgs.KeyInfo);
+                if(DEBUG_MODE)
+                    FogConsole.Write(0, Console.WindowHeight - 2, "Focused: " + FocusManager.FocusedControl.Name.PadRight(20));
             }
         }
     }

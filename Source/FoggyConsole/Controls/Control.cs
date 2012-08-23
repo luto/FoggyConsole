@@ -11,26 +11,66 @@ namespace FoggyConsole.Controls
     public abstract class Control
     {
         private ControlDrawer _drawer;
+        private int _top;
+        private int _left;
+        private int _width;
+        private int _height;
 
         /// <summary>
         /// Distance from the top edge of its Container in characters
         /// </summary>
-        public int Top { get; set; }
+        public int Top
+        {
+            get { return _top; }
+            set
+            {
+                if (value < 0)
+                    throw new ArgumentException("Top has to be bigger than zero.");
+                _top = value;
+            }
+        }
         
         /// <summary>
         /// Distance from the left edge of its Container in characters
         /// </summary>
-        public int Left { get; set; }
+        public int Left
+        {
+            get { return _left; }
+            set
+            {
+                if (value < 0)
+                    throw new ArgumentException("Left has to be bigger than zero.");
+                _left = value;
+            }
+        }
         
         /// <summary>
         /// The width of this Control in characters
         /// </summary>
-        public int Width { get; set; }
+        public int Width
+        {
+            get { return _width; }
+            set
+            {
+                if (value < 0)
+                    throw new ArgumentException("Width has to be bigger than zero.");
+                _width = value;
+            }
+        }
         
         /// <summary>
         /// The height of this Control in characters
         /// </summary>
-        public int Height { get; set; }
+        public int Height
+        {
+            get { return _height; }
+            set
+            {
+                if (value < 0)
+                    throw new ArgumentException("Height has to be bigger than zero.");
+                _height = value;
+            }
+        }
         
         /// <summary>
         /// The name of this Control, must be unique within its Container

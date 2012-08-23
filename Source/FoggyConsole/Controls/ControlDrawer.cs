@@ -8,9 +8,9 @@ namespace FoggyConsole.Controls
     /// <summary>
     /// Base class for all ControlDrawers
     /// </summary>
-    public abstract class ControlDrawer
+    public abstract class ControlDrawer<T> : IControlDrawer where T : Control
     {
-        private Control _control;
+        protected T _control;
 
         /// <summary>
         /// The Control which should be drawn
@@ -23,7 +23,9 @@ namespace FoggyConsole.Controls
             {
                 if(value.Drawer != null && value.Drawer != this)
                     throw new ArgumentException("Control already has a Drawer assigned", "value");
-                _control = value;
+                if(!(value is T))
+                    throw new ArgumentException("Control has to be of type: " + typeof(T).Name);
+                _control = value as T;
             }
         }
 
@@ -32,7 +34,7 @@ namespace FoggyConsole.Controls
         /// Creates a new ControlDrawer
         /// </summary>
         /// <param name="control">The Control to draw</param>
-        public ControlDrawer(Control control = null)
+        public ControlDrawer(T control = null)
         {
             Control = control;
         }

@@ -68,7 +68,7 @@ namespace FoggyConsole.Controls
         /// </summary>
         /// <param name="drawer"></param>
         /// <exception cref="ArgumentException">Thrown if the ControlDrawer which should be set already has an other Control assigned</exception>
-        public ContainerControl(ControlDrawer drawer)
+        public ContainerControl(IControlDrawer drawer)
             : base(drawer)
         {
             _controls = new List<Control>();

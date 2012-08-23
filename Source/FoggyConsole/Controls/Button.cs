@@ -30,7 +30,7 @@ namespace FoggyConsole.Controls
         /// <param name="text">The text which is drawn onto the Button.</param>
         /// <param name="drawer">The <code>ButtonDrawer</code> to use. If null a new instance of <code>ButtonDrawer</code> will be used.</param>
         /// <exception cref="ArgumentException">Thrown if the ButtonDrawer which should be set already has an other Button assigned</exception>
-        public Button(string text, ButtonDrawer drawer = null)
+        public Button(string text, ControlDrawer<Button> drawer = null)
             : base(drawer)
         {
             if(text == null)
@@ -45,7 +45,7 @@ namespace FoggyConsole.Controls
         {
             if(keyInfo.Key == ConsoleKey.Spacebar)
             {
-
+                FogConsole.Write(0, 0, "Pressed button: " + this.Name);
                 return true;
             }
             return false;
@@ -55,28 +55,31 @@ namespace FoggyConsole.Controls
     /// <summary>
     /// Draws a <code>Button</code>-Control
     /// </summary>
-    public class ButtonDrawer : ControlDrawer
+    public class ButtonDrawer : ControlDrawer<Button>
     {
-        private Button Button { get { return Control as Button; } }
-
-
         public ButtonDrawer(Button control = null)
             : base(control)
         {
         }
 
-
+        /// <summary>
+        /// Draws the <code>Button</code> given in the Control-Property.
+        /// </summary>
+        /// <param name="leftOffset">Offset for the left value (used to convert local coordinates within a container to global ones)</param>
+        /// <param name="topOffset">Offset for the top value (used to convert local coordinates within a container to global ones)</param>
+        /// <param name="boundary">The boundary of the <code>ContainerControl</code> in which the <code>Control</code> is placed</param>
+        /// <exception cref="InvalidOperationException">Is thrown if the Control-Property isn't set.</exception>
         public override void Draw(int leftOffset, int topOffset, Rectangle boundary)
         {
             if(Control == null)
                 throw new InvalidOperationException("Can't draw without the Control-Property set.");
 
-            var text = Button.Text;
-            if (Button.Width != 0 && text.Length + 4 > Button.Width)
-                text = text.Substring(0, Button.Width - 4);
+            var text = _control.Text;
+            if (Control.Width != 0 && text.Length + 4 > Control.Width)
+                text = text.Substring(0, Control.Width - 4);
 
-            FogConsole.Write(leftOffset + Button.Left,
-                             topOffset  + Button.Top,
+            FogConsole.Write(leftOffset + Control.Left,
+                             topOffset + Control.Top,
                              "[ " + text + " ]",
                              boundary);
         }

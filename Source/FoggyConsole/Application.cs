@@ -72,8 +72,14 @@ namespace FoggyConsole
         {
             if(DEBUG_MODE)
                 FogConsole.Write(0, Console.WindowHeight - 1, "Key pressed: " + eventArgs.KeyInfo.Key.ToString().PadRight(10), null, ConsoleColor.DarkGray);
+            bool handled = false;
 
-            if(FocusManager != null && FocusManager.HandledKeys.Contains(eventArgs.KeyInfo.Key))
+            if(FocusManager.FocusedControl is IInputHandler)
+            {
+                handled = (FocusManager.FocusedControl as IInputHandler).HandleKeyInput(eventArgs.KeyInfo);
+            }
+
+            if(!handled && FocusManager != null && FocusManager.HandledKeys.Contains(eventArgs.KeyInfo.Key))
             {
                 FocusManager.HandleKeyInput(eventArgs.KeyInfo);
                 if(DEBUG_MODE)

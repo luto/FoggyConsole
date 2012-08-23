@@ -10,7 +10,7 @@ namespace FoggyConsole.Controls
     /// </summary>
     public abstract class Control
     {
-        private ControlDrawer _drawer;
+        private IControlDrawer _drawer;
         private int _top;
         private int _left;
         private int _width;
@@ -91,14 +91,14 @@ namespace FoggyConsole.Controls
         /// An instance of a subclass of <code>ControlDrawer</code> which is able to draw this specific type of Control
         /// </summary>
         /// <exception cref="ArgumentException">Thrown if the ControlDrawer which should be set already has an other Control assigned</exception>
-        public ControlDrawer Drawer
+        public IControlDrawer Drawer
         {
             get { return _drawer; }
             set
             {
                 if(value != null && value.Control != null && value.Control != this)
                     throw new ArgumentException("Drawer already has an other Control assigned.", "value");
-                _drawer = value;
+                _drawer = value ;
             }
         }
 
@@ -107,7 +107,7 @@ namespace FoggyConsole.Controls
         /// </summary>
         /// <param name="drawer">The <code>ControlDrawer</code> to set</param>
         /// <exception cref="ArgumentException">Thrown if the ControlDrawer which should be set already has an other Control assigned</exception>
-        public Control(ControlDrawer drawer)
+        public Control(IControlDrawer drawer)
         {
             Drawer = drawer;
         }

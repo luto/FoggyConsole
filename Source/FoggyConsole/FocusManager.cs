@@ -42,9 +42,16 @@ namespace FoggyConsole
         /// Creates a new FocusManager
         /// </summary>
         /// <param name="startControl"></param>
+        /// <exception cref="ArgumentException">Is thrown if <paramref name="startControl"/> has no container</exception>
+        /// <exception cref="ArgumentException">Is thrown if <paramref name="startControl"/> is no IInputHandler</exception>
         public FocusManager(Control startControl)
         {
+            if (startControl.Container == null)
+                throw new ArgumentException("startControl doesn't have an container!", "startControl");
+            if (!(startControl is IInputHandler))
+                throw new ArgumentException("startControl isn't an IInputHandler!", "startControl");
             FocusedControl = startControl;
+            FocusedControl.IsFocused = true;
         }
 
 
@@ -58,7 +65,9 @@ namespace FoggyConsole
             switch (keyInfo.Key)
             {
                 case ConsoleKey.Tab:
+                    FocusedControl.IsFocused = false;
                     FocusedControl = HandleTab(FocusedControl);
+                    FocusedControl.IsFocused = true;
                     break;
                 default:
                     throw new ArgumentException("Given key isn't listed in HandledKeys", "keyInfo");
@@ -83,10 +92,15 @@ namespace FoggyConsole
             }
             var foundControl = control.Container[index + 1];
 
-            if(foundControl is ContainerControl)
+            if(foundControl is ContainerControl && (foundControl as ContainerControl).Count > 0)
             {
                 foundControl = (foundControl as ContainerControl)[0];
             }
+
+            // this *should* go well because it isn't possible to create an FocusManager
+            // if there are no IInputHandler-Controls in the Application
+            while (foundControl is ContainerControl)
+                foundControl = HandleTab(foundControl);
 
             return foundControl;
         }

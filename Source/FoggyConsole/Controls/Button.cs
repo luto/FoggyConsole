@@ -12,17 +12,26 @@ namespace FoggyConsole.Controls
     /// </summary>
     public class Button : Control, IInputHandler
     {
-        private ButtonDrawer ButtonDrawer { get { return Drawer as ButtonDrawer; } }
+        private string _text;
 
         /// <summary>
         /// Gets or sets the text which is drawn onto the Button.
         /// </summary>
-        public string Text { get; set; }
+        public string Text
+        {
+            get { return _text; }
+            set
+            {
+                _text = value;
+                RedrawNeeded = true;
+            }
+        }
         /// <summary>
         /// Gets the standard height for buttons.
         /// </summary>
         public new int Height { get { return 1; } }
 
+        public event EventHandler Pressed;
 
         /// <summary>
         /// Creates a new <code>Button</code>
@@ -39,16 +48,23 @@ namespace FoggyConsole.Controls
                 base.Drawer = new ButtonDrawer(this);
 
             this.Text = text;
+            base.IsFocusedChanged += (sender, args) => RedrawNeeded = true;
         }
 
         bool IInputHandler.HandleKeyInput(ConsoleKeyInfo keyInfo)
         {
             if(keyInfo.Key == ConsoleKey.Spacebar)
             {
-                FogConsole.Write(0, 0, "Pressed button: " + this.Name);
+                OnPressed();
                 return true;
             }
             return false;
+        }
+
+        private void OnPressed()
+        {
+            if (Pressed != null)
+                Pressed(this, EventArgs.Empty);
         }
     }
 
@@ -73,6 +89,8 @@ namespace FoggyConsole.Controls
         {
             if(Control == null)
                 throw new InvalidOperationException("Can't draw without the Control-Property set.");
+            if(!Control.RedrawNeeded)
+                return;
 
             var text = _control.Text;
             if (Control.Width != 0 && text.Length + 4 > Control.Width)
@@ -81,7 +99,11 @@ namespace FoggyConsole.Controls
             FogConsole.Write(leftOffset + Control.Left,
                              topOffset + Control.Top,
                              "[ " + text + " ]",
-                             boundary);
+                             boundary,
+                             Control.IsFocused ? ConsoleColor.Black : ConsoleColor.Gray,
+                             Control.IsFocused ? ConsoleColor.Gray : ConsoleColor.Black);
+
+            Control.RedrawNeeded = false;
         }
     }
 }

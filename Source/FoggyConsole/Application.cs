@@ -64,8 +64,14 @@ namespace FoggyConsole
         public void Run()
         {
             _running = true;
-            RootContainer.Drawer.Draw(0, 0, new Rectangle(0, 0, Console.WindowHeight, Console.WindowWidth));
+            Redraw();
             KeyWatcher.KeyPressed += KeyWatcherOnKeyPressed;
+        }
+
+        private void Redraw()
+        {
+            var mainBoundary = new Rectangle(0, 0, Console.WindowHeight, Console.WindowWidth);
+            RootContainer.Drawer.Draw(0, 0, mainBoundary);
         }
 
         private void KeyWatcherOnKeyPressed(object sender, KeyPressedEventArgs eventArgs)
@@ -83,8 +89,10 @@ namespace FoggyConsole
             {
                 FocusManager.HandleKeyInput(eventArgs.KeyInfo);
                 if(DEBUG_MODE)
-                    FogConsole.Write(0, Console.WindowHeight - 2, "Focused: " + FocusManager.FocusedControl.Name.PadRight(20));
+                    FogConsole.Write(0, Console.WindowHeight - 2, "Focused: " + FocusManager.FocusedControl.Name.PadRight(20), null, ConsoleColor.DarkGray);
             }
+
+            Redraw();
         }
     }
 }

@@ -15,6 +15,7 @@ namespace FoggyConsole.Controls
         private int _left;
         private int _width;
         private int _height;
+        private bool _isFocused;
 
         /// <summary>
         /// Distance from the top edge of its Container in characters
@@ -27,6 +28,7 @@ namespace FoggyConsole.Controls
                 if (value < 0)
                     throw new ArgumentException("Top has to be bigger than zero.");
                 _top = value;
+                RedrawNeeded = true;
             }
         }
         
@@ -41,6 +43,7 @@ namespace FoggyConsole.Controls
                 if (value < 0)
                     throw new ArgumentException("Left has to be bigger than zero.");
                 _left = value;
+                RedrawNeeded = true;
             }
         }
         
@@ -55,6 +58,7 @@ namespace FoggyConsole.Controls
                 if (value < 0)
                     throw new ArgumentException("Width has to be bigger than zero.");
                 _width = value;
+                RedrawNeeded = true;
             }
         }
         
@@ -69,6 +73,7 @@ namespace FoggyConsole.Controls
                 if (value < 0)
                     throw new ArgumentException("Height has to be bigger than zero.");
                 _height = value;
+                RedrawNeeded = true;
             }
         }
         
@@ -76,6 +81,24 @@ namespace FoggyConsole.Controls
         /// The name of this Control, must be unique within its Container
         /// </summary>
         public string Name { get; set; }
+
+        /// <summary>
+        /// True if the control needs to be redrawn, otherwise false
+        /// </summary>
+        public bool RedrawNeeded { get; set; }
+
+        /// <summary>
+        /// True if the control is focuses, otherwise false
+        /// </summary>
+        public bool IsFocused
+        {
+            get { return _isFocused; }
+            set
+            {
+                _isFocused = value;
+                OnIsFocusedChanged();
+            }
+        }
 
         /// <summary>
         /// Used to determine the order of controls when the user uses the TAB-key navigate between them
@@ -103,6 +126,17 @@ namespace FoggyConsole.Controls
         }
 
         /// <summary>
+        /// Fired if the <code>IsFocused</code>-Property has been changed
+        /// </summary>
+        public event EventHandler IsFocusedChanged;
+
+        private void OnIsFocusedChanged()
+        {
+            if (IsFocusedChanged != null)
+                IsFocusedChanged(this, EventArgs.Empty);
+        }
+
+        /// <summary>
         /// Creates a new <code>Control</code>
         /// </summary>
         /// <param name="drawer">The <code>ControlDrawer</code> to set</param>
@@ -110,6 +144,7 @@ namespace FoggyConsole.Controls
         public Control(IControlDrawer drawer)
         {
             Drawer = drawer;
+            RedrawNeeded = true;
         }
     }
 }

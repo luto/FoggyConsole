@@ -59,7 +59,7 @@ namespace FoggyConsole.Controls
             var oldBoundary = boundary;
             boundary = new Rectangle(leftOffset, topOffset, Control.Height, Control.Width);
             
-            if (Application.DEBUG_MODE)
+            if (Application.DEBUG_MODE && Control.RedrawNeeded)
             {
                 FogConsole.DrawBox(boundary, DEBUG_CHAR_SET, oldBoundary,
                                    bColor: DEBUG_COLORS[DEBUG_COLOR_COUNTER],
@@ -80,6 +80,8 @@ namespace FoggyConsole.Controls
             {
                 control.Drawer.Draw(leftOffset, topOffset, boundary);
             }
+
+            Control.RedrawNeeded = false;
         }
     }
 }

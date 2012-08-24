@@ -108,6 +108,7 @@ namespace FoggyConsole.Controls
         {
             item.Container = this;
             _controls.Add(item);
+            Sort();
         }
 
         /// <summary>
@@ -131,10 +132,13 @@ namespace FoggyConsole.Controls
             return _controls.Contains(item);
         }
 
-        /// <exception cref="NotImplementedException">Is Thrown.</exception>
+        /// <summary>
+        /// Copies the elements of the <see cref="T:System.Collections.Generic.ICollection`1"/> to an <see cref="T:System.Array"/>, starting at a particular <see cref="T:System.Array"/> index.
+        /// </summary>
+        /// <param name="array">The one-dimensional <see cref="T:System.Array"/> that is the destination of the elements copied from <see cref="T:System.Collections.Generic.ICollection`1"/>. The <see cref="T:System.Array"/> must have zero-based indexing.</param><param name="arrayIndex">The zero-based index in <paramref name="array"/> at which copying begins.</param><exception cref="T:System.ArgumentNullException"><paramref name="array"/> is null.</exception><exception cref="T:System.ArgumentOutOfRangeException"><paramref name="arrayIndex"/> is less than 0.</exception><exception cref="T:System.ArgumentException">The number of elements in the source <see cref="T:System.Collections.Generic.ICollection`1"/> is greater than the available space from <paramref name="arrayIndex"/> to the end of the destination <paramref name="array"/>.</exception>
         public void CopyTo(Control[] array, int arrayIndex)
         {
-            throw new NotImplementedException();
+            _controls.CopyTo(array, arrayIndex);
         }
 
         /// <summary>
@@ -202,6 +206,7 @@ namespace FoggyConsole.Controls
         public void Insert(int index, Control item)
         {
             _controls.Insert(index, item);
+            Sort();
         }
 
         /// <summary>
@@ -214,5 +219,9 @@ namespace FoggyConsole.Controls
         }
         #endregion
 
+        private void Sort()
+        {
+         //   _controls.Sort((c1, c2) => c2.TabIndex.CompareTo(c1.TabIndex));
+        }
     }
 }

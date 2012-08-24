@@ -21,15 +21,15 @@ namespace FoggyConsole.Test
             rootPanel.Height = 17;
             rootPanel.Name = "rootPanel";
 
-            Button button0 = new Button("asd0") { Left = 1, Top = 1, Name = "asd0" };
-            Button button1 = new Button("asd1") { Left = 10, Top = 1, Name = "asd1" };
-            Button button2 = new Button("asd2") { Left = 15, Top = 2, Name = "asd2" };
+            Button button0 = new Button("asd0") { Left = 1, Top = 1, Name = "asd0", TabIndex = 3 };
+            Button button1 = new Button("asd1") { Left = 10, Top = 1, Name = "asd1", TabIndex =  2 };
+            Button button2 = new Button("asd2") { Left = 15, Top = 2, Name = "asd2", TabIndex = 1 };
             
             rootPanel.Add(button0);
             rootPanel.Add(button1);
             rootPanel.Add(button2);
 
-
+            button0.Pressed += (sender, eventArgs) => button1.Text = "foooobar";
 
             Panel innerPanel1 = new Panel();
             innerPanel1.Top = 5;
@@ -72,7 +72,7 @@ namespace FoggyConsole.Test
             innerPanel4.Height = 50;
             innerPanel4.Width = 40;
             innerPanel4.Name = "innerInnerPanel4";
-            Button b2 = new Button("asd6") { Left = 2, Top = 2, Name = "asd6" };
+            Button b2 = new Button("asd7") { Left = 2, Top = 2, Name = "asd7" };
             innerPanel4.Add(b2);
             innerPanel2.Add(innerPanel4);
             

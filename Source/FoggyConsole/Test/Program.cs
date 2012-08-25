@@ -29,8 +29,6 @@ namespace FoggyConsole.Test
             rootPanel.Add(button1);
             rootPanel.Add(button2);
 
-            button0.Pressed += (sender, eventArgs) => button1.Text = "foooobar";
-
             Panel innerPanel1 = new Panel();
             innerPanel1.Top = 5;
             innerPanel1.Left = 5;
@@ -62,8 +60,8 @@ namespace FoggyConsole.Test
             innerPanel3.Height = 5;
             innerPanel3.Width = 20;
             innerPanel3.Name = "innerInnerPanel3";
-            Button b = new Button("asd6") { Left = 2, Top = 2, Name = "asd6" };
-            innerPanel3.Add(b);
+            Button button6 = new Button("asd6") { Left = 2, Top = 2, Name = "asd6" };
+            innerPanel3.Add(button6);
             innerPanel2.Add(innerPanel3);
 
             Panel innerPanel4 = new Panel();
@@ -72,13 +70,22 @@ namespace FoggyConsole.Test
             innerPanel4.Height = 50;
             innerPanel4.Width = 40;
             innerPanel4.Name = "innerInnerPanel4";
-            Button b2 = new Button("asd7") { Left = 2, Top = 2, Name = "asd7" };
-            innerPanel4.Add(b2);
+            Button button7 = new Button("asd7") { Left = 2, Top = 2, Name = "asd7" };
+            innerPanel4.Add(button7);
             innerPanel2.Add(innerPanel4);
             
 
             rootPanel.Add(innerPanel1);
             rootPanel.Add(innerPanel2);
+
+            button0.Pressed += (sender, eventArgs) => (sender as Button).Text = "o";
+            button1.Pressed += (sender, eventArgs) => (sender as Button).Text = "o";
+            button2.Pressed += (sender, eventArgs) => (sender as Button).Text = "o";
+            button3.Pressed += (sender, eventArgs) => (sender as Button).Text = "o";
+            button4.Pressed += (sender, eventArgs) => (sender as Button).Text = "o";
+            button5.Pressed += (sender, eventArgs) => (sender as Button).Text = "o";
+            button6.Pressed += (sender, eventArgs) => (sender as Button).Text = "o";
+            button7.Pressed += (sender, eventArgs) => (sender as Button).Text = "o";
 
             Application app = new Application(rootPanel);
             app.FocusManager = new FocusManager(button0);

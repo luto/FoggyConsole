@@ -10,6 +10,9 @@ namespace FoggyConsole.Controls
     /// </summary>
     public abstract class ControlDrawer<T> : IControlDrawer where T : Control
     {
+        /// <summary>
+        /// The Control which should be drawn
+        /// </summary>
         protected T _control;
 
         /// <summary>
@@ -29,6 +32,11 @@ namespace FoggyConsole.Controls
             }
         }
 
+        /// <summary>
+        /// The boundary of the Control given in the Control-Property
+        /// </summary>
+        public Rectangle Boundary { get; protected set; }
+
 
         /// <summary>
         /// Creates a new ControlDrawer
@@ -42,9 +50,14 @@ namespace FoggyConsole.Controls
         /// <summary>
         /// Draws the Control stored in the Control-Property
         /// </summary>
+        public abstract void Draw();
+
+        /// <summary>
+        /// Calculates the boundary of the Control given in the Control-Property and stores it in the Boundary-Property
+        /// </summary>
         /// <param name="leftOffset">Offset for the left value (used to convert local coordinates within a container to global ones)</param>
         /// <param name="topOffset">Offset for the top value (used to convert local coordinates within a container to global ones)</param>
         /// <param name="boundary">The boundary of the <code>ContainerControl</code> in which the <code>Control</code> is placed</param>
-        public abstract void Draw(int leftOffset, int topOffset, Rectangle boundary);
+        public abstract void CalculateBoundary(int leftOffset, int topOffset, Rectangle boundary);
     }
 }

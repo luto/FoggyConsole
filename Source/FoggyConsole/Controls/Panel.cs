@@ -42,46 +42,64 @@ namespace FoggyConsole.Controls
         /// <summary>
         /// Draws the <code>Panel</code> given in the Control-Property.
         /// </summary>
-        /// <param name="leftOffset">Offset for the left value (used to convert local coordinates within a container to global ones)</param>
-        /// <param name="topOffset">Offset for the top value (used to convert local coordinates within a container to global ones)</param>
-        /// <param name="boundary">The boundary of the <code>ContainerControl</code> in which the <code>Control</code> is placed</param>
         /// <exception cref="InvalidOperationException">Is thrown if the Control-Property isn't set.</exception>
-        public override void Draw(int leftOffset, int topOffset, Rectangle boundary)
+        public override void Draw()
         {
             if (Control == null)
                 throw new InvalidOperationException("Can't draw without the Control-Property set.");
             if (Control.Width == 0 || Control.Height == 0)
                 return;
 
-            leftOffset += Control.Left;
-            topOffset += Control.Top;
-
-            var oldBoundary = boundary;
-            boundary = new Rectangle(leftOffset, topOffset, Control.Height, Control.Width);
-            
-            if (Application.DEBUG_MODE && Control.RedrawNeeded)
+            if (Application.DEBUG_MODE)
             {
-                FogConsole.DrawBox(boundary, DEBUG_CHAR_SET, oldBoundary,
+                var boxBound = new Rectangle(Boundary.Left,
+                                             Boundary.Top,
+                                             Control.Height,
+                                             Control.Width);
+
+                FogConsole.DrawBox(boxBound, DEBUG_CHAR_SET, Boundary,
                                    bColor: DEBUG_COLORS[DEBUG_COLOR_COUNTER],
                                    bFillColor: DEBUG_COLORS[DEBUG_COLOR_COUNTER],
                                    fill: true);
-                FogConsole.Write(leftOffset, topOffset, "{" + _control.Name + "}", oldBoundary, ConsoleColor.Black, DEBUG_COLORS[DEBUG_COLOR_COUNTER]);
+                FogConsole.Write(Boundary.Left, Boundary.Top, "{" + _control.Name + "}", Boundary, ConsoleColor.Black, DEBUG_COLORS[DEBUG_COLOR_COUNTER]);
                 DEBUG_COLOR_COUNTER++;
                 if (DEBUG_COLOR_COUNTER == DEBUG_COLORS.Length)
                     DEBUG_COLOR_COUNTER = 0;
             }
 
-            if (boundary.Left + boundary.Width > oldBoundary.Left + oldBoundary.Width)
-                boundary.Width = oldBoundary.Width - (boundary.Left - oldBoundary.Left);
-            if (boundary.Top + boundary.Height > oldBoundary.Top + oldBoundary.Height)
-                boundary.Height = oldBoundary.Height - (boundary.Top - oldBoundary.Height);
+            foreach (var control in _control)
+            {
+                control.Drawer.Draw();
+            }
+        }
+
+        /// <summary>
+        /// Calculates the boundary of the Control given in the Control-Property and stores it in the Boundary-Property
+        /// </summary>
+        /// <param name="leftOffset">Offset for the left value (used to convert local coordinates within a container to global ones)</param>
+        /// <param name="topOffset">Offset for the top value (used to convert local coordinates within a container to global ones)</param>
+        /// <param name="boundary">The boundary of the <code>ContainerControl</code> in which the <code>Control</code> is placed</param>
+        public override void CalculateBoundary(int leftOffset, int topOffset, Rectangle boundary)
+        {
+            int left = leftOffset + Control.Left;
+            int top = topOffset + Control.Top;
+            int width = Control.Width;
+            int height = Control.Height;
+
+            if (left + width > boundary.Left + boundary.Width)
+                width = boundary.Width - (left - boundary.Left);
+            if (top + height > boundary.Top + boundary.Height)
+                height = boundary.Height - (top - boundary.Top);
+
+            Boundary = new Rectangle(left,
+                                     top,
+                                     height,
+                                     width);
 
             foreach (var control in _control)
             {
-                control.Drawer.Draw(leftOffset, topOffset, boundary);
+                control.Drawer.CalculateBoundary(left, top, Boundary);
             }
-
-            Control.RedrawNeeded = false;
         }
     }
 }

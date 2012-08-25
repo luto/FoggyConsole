@@ -77,6 +77,8 @@ namespace FoggyConsole
 
         private Control HandleTab(Control control)
         {
+            // TODO: use TabIndex
+            
             var index = GetIndexOf(control);
 
             if(control.Container == null) // got the root

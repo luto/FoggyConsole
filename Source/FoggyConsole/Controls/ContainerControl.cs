@@ -40,13 +40,18 @@ namespace FoggyConsole.Controls
         /// <param name="index">The zero-based index of the element to get or set.</param>
         /// <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="index"/> is not a valid index in the <see cref="T:System.Collections.Generic.IList`1"/>.</exception>
         /// <exception cref="T:System.NotSupportedException">The property is set and the <see cref="T:System.Collections.Generic.IList`1"/> is read-only.</exception>
+        /// <exception cref="ArgumentNullException">Is thrown if the value to set is null</exception>
         public Control this[int index]
         {
             get { return _controls[index]; }
             set
             {
+                if(value == null)
+                    throw new ArgumentNullException("value");
                 value.Container = this;
+                OnControlRemoved(_controls[index]);
                 _controls[index] = value;
+                OnControlAdded(value);
             }
         }
 
@@ -108,7 +113,7 @@ namespace FoggyConsole.Controls
         {
             item.Container = this;
             _controls.Add(item);
-            Sort();
+            OnControlAdded(item);
         }
 
         /// <summary>
@@ -117,7 +122,10 @@ namespace FoggyConsole.Controls
         /// <exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Generic.ICollection`1"/> is read-only. </exception>
         public void Clear()
         {
+            var controls = _controls.ToArray();
             _controls.Clear();
+            foreach (var c in controls)
+                OnControlRemoved(c);
         }
 
         /// <summary>
@@ -150,7 +158,9 @@ namespace FoggyConsole.Controls
         /// <param name="item">The object to remove from the <see cref="T:System.Collections.Generic.ICollection`1"/>.</param><exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Generic.ICollection`1"/> is read-only.</exception>
         public bool Remove(Control item)
         {
-            return _controls.Remove(item);
+            var retn = _controls.Remove(item);
+            OnControlRemoved(item);
+            return retn;
         }
 
         /// <summary>
@@ -163,8 +173,9 @@ namespace FoggyConsole.Controls
             var index = FindByName(name);
             if (index == -1)
                 return false;
-            else
-                RemoveAt(index);
+            var c = this[index];
+            RemoveAt(index);
+            OnControlRemoved(c);
             return true;
         }
 
@@ -206,7 +217,7 @@ namespace FoggyConsole.Controls
         public void Insert(int index, Control item)
         {
             _controls.Insert(index, item);
-            Sort();
+            OnControlAdded(item);
         }
 
         /// <summary>
@@ -215,13 +226,56 @@ namespace FoggyConsole.Controls
         /// <param name="index">The zero-based index of the item to remove.</param><exception cref="T:System.ArgumentOutOfRangeException"><paramref name="index"/> is not a valid index in the <see cref="T:System.Collections.Generic.IList`1"/>.</exception><exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Generic.IList`1"/> is read-only.</exception>
         public void RemoveAt(int index)
         {
+            var c = this[index];
             _controls.RemoveAt(index);
+            OnControlRemoved(c);
         }
         #endregion
 
-        private void Sort()
+        /// <summary>
+        /// Fired if a control gets added to this container
+        /// </summary>
+        /// <seealso cref="ControlRemoved"/>
+        public event EventHandler<ContainerControlEventArgs> ControlAdded;
+
+        private void OnControlAdded(Control c)
         {
-         //   _controls.Sort((c1, c2) => c2.TabIndex.CompareTo(c1.TabIndex));
+            c.Container = this;
+            if (ControlAdded != null)
+                ControlAdded(this, new ContainerControlEventArgs(c));
+        }
+
+        /// <summary>
+        /// Fired if a control gets removed from this container
+        /// </summary>
+        /// <seealso cref="ControlAdded"/>
+        public event EventHandler<ContainerControlEventArgs> ControlRemoved;
+
+        private void OnControlRemoved(Control c)
+        {
+            c.Container = null;
+            if(ControlRemoved != null)
+                ControlRemoved(this, new ContainerControlEventArgs(c));
+        }
+    }
+
+    /// <summary>
+    /// Used by <code>ContainerControl</code> in ControlAdded and ControlRemoved events
+    /// </summary>
+    public class ContainerControlEventArgs : EventArgs
+    {
+        /// <summary>
+        /// The control which has been added or removed
+        /// </summary>
+        public Control Control { get; private set; }
+
+        /// <summary>
+        /// Creates a new <code>ContainerControlEventArgs</code>
+        /// </summary>
+        /// <param name="control">The control which has been added or removed</param>
+        public ContainerControlEventArgs(Control control)
+        {
+            this.Control = control;
         }
     }
 }

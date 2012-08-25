@@ -27,8 +27,14 @@ namespace FoggyConsole.Controls
             {
                 if (value < 0)
                     throw new ArgumentException("Top has to be bigger than zero.");
+                var oldTop = _top;
+
                 _top = value;
-                RedrawNeeded = true;
+
+                if (_top < oldTop)
+                    RequestRedraw(RedrawRequestReason.BecameSmaller);
+                else if (_top < oldTop)
+                    RequestRedraw(RedrawRequestReason.BecameBigger);
             }
         }
         
@@ -42,8 +48,14 @@ namespace FoggyConsole.Controls
             {
                 if (value < 0)
                     throw new ArgumentException("Left has to be bigger than zero.");
+                var oldLeft = _left;
+
                 _left = value;
-                RedrawNeeded = true;
+
+                if (_left < oldLeft)
+                    RequestRedraw(RedrawRequestReason.BecameSmaller);
+                else if (_left < oldLeft)
+                    RequestRedraw(RedrawRequestReason.BecameBigger);
             }
         }
         
@@ -57,8 +69,14 @@ namespace FoggyConsole.Controls
             {
                 if (value < 0)
                     throw new ArgumentException("Width has to be bigger than zero.");
+                var oldWidth = _width;
+
                 _width = value;
-                RedrawNeeded = true;
+
+                if (_width < oldWidth)
+                    RequestRedraw(RedrawRequestReason.BecameSmaller);
+                else if (_width < oldWidth)
+                    RequestRedraw(RedrawRequestReason.BecameBigger);
             }
         }
         
@@ -72,8 +90,14 @@ namespace FoggyConsole.Controls
             {
                 if (value < 0)
                     throw new ArgumentException("Height has to be bigger than zero.");
+                var oldHeight = _height;
+
                 _height = value;
-                RedrawNeeded = true;
+
+                if (_height < oldHeight)
+                    RequestRedraw(RedrawRequestReason.BecameSmaller);
+                else if (_height < oldHeight)
+                    RequestRedraw(RedrawRequestReason.BecameBigger);
             }
         }
         
@@ -81,11 +105,6 @@ namespace FoggyConsole.Controls
         /// The name of this Control, must be unique within its Container
         /// </summary>
         public string Name { get; set; }
-
-        /// <summary>
-        /// True if the control needs to be redrawn, otherwise false
-        /// </summary>
-        public bool RedrawNeeded { get; set; }
 
         /// <summary>
         /// True if the control is focuses, otherwise false
@@ -137,6 +156,26 @@ namespace FoggyConsole.Controls
         }
 
         /// <summary>
+        /// Fired if the <code>RedrawNeeded</code>-Property has been changed
+        /// </summary>
+        public event EventHandler<RedrawRequestedEventArgs> RedrawRequested;
+
+        private void OnRedrawNeededChanged(RedrawRequestReason reason)
+        {
+            if (RedrawRequested != null)
+                RedrawRequested(this, new RedrawRequestedEventArgs(reason));
+        }
+
+        /// <summary>
+        /// Requests an redraw of this control and stores <paramref name="reason"/> for the receiver
+        /// </summary>
+        /// <param name="reason">The reason for the Redraw-Request</param>
+        protected void RequestRedraw(RedrawRequestReason reason)
+        {
+            OnRedrawNeededChanged(reason);
+        }
+
+        /// <summary>
         /// Creates a new <code>Control</code>
         /// </summary>
         /// <param name="drawer">The <code>ControlDrawer</code> to set</param>
@@ -144,7 +183,6 @@ namespace FoggyConsole.Controls
         public Control(IControlDrawer drawer)
         {
             Drawer = drawer;
-            RedrawNeeded = true;
         }
     }
 }

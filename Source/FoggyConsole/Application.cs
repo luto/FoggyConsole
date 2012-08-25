@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
@@ -49,29 +50,99 @@ namespace FoggyConsole
         /// <exception cref="ArgumentException">Thrown when the Container-Property of <paramref name="rootContainer"/> is set.</exception>
         public Application(ContainerControl rootContainer)
         {
-            if(rootContainer == null)
+            if (rootContainer == null)
                 throw new ArgumentNullException("rootContainer");
-            if(rootContainer.Container != null)
+            if (rootContainer.Container != null)
                 throw new ArgumentException("The root-container can't have the Container-Property set.", "rootContainer");
 
             RootContainer = rootContainer;
         }
-
 
         /// <summary>
         /// Starts this <code>Application</code>.
         /// </summary>
         public void Run()
         {
+            WireControlEvents(RootContainer);
+            RootContainer.Drawer.CalculateBoundary(0, 0, new Rectangle(0, 0, Console.WindowHeight, Console.WindowWidth));
             _running = true;
             Redraw();
             KeyWatcher.KeyPressed += KeyWatcherOnKeyPressed;
+            RootContainer.ControlAdded += OnControlAdded;
+            RootContainer.ControlRemoved += OnControlRemoved;
+        }
+
+        private void OnControlAdded(object sender, ContainerControlEventArgs eventArgs)
+        {
+            WireControlEvents(eventArgs.Control);
+            eventArgs.Control.RedrawRequested += (o, args) => RedrawRequested(o as Control, args);
+        }
+
+        private void OnControlRemoved(object sender, ContainerControlEventArgs eventArgs)
+        {
+            RemoveControlEvents(eventArgs.Control);
+        }
+
+        /// <summary>
+        /// Subscribes <code>RedrawRequested</code> to <code>Control.RedrawRequested</code> on <paramref name="control"/> and all its child-controls.
+        /// Also subscribes <code>OnControlAdded</code> to <code>ContainerControl.ControlAdded</code> if <paramref name="control"/> is an <code>ContainerControl</code>
+        /// </summary>
+        /// <param name="control">The control to whose events should be subscribed</param>
+        /// <seealso cref="RemoveControlEvents"/>
+        private void WireControlEvents(Control control)
+        {
+            control.RedrawRequested += RedrawRequested;
+
+            if (control is ContainerControl)
+            {
+                var container = control as ContainerControl;
+                container.ControlAdded += OnControlAdded;
+
+                foreach (var c in container)
+                    WireControlEvents(c);
+            }
+        }
+
+        /// <summary>
+        /// Unsubscribes <code>RedrawRequested</code> from <code>Control.RedrawRequested</code> on <paramref name="control"/> and all its child-controls.
+        /// Also unsubscribes <code>OnControlAdded</code> from <code>ContainerControl.ControlAdded</code> if <paramref name="control"/> is an <code>ContainerControl</code>
+        /// </summary>
+        /// <param name="control">The control from whose events should be unsubscribed</param>
+        /// <seealso cref="WireControlEvents"/>
+        private void RemoveControlEvents(Control control)
+        {
+            control.RedrawRequested -= RedrawRequested;
+
+            if (control is ContainerControl)
+            {
+                var container = control as ContainerControl;
+                container.ControlAdded -= OnControlAdded;
+
+                foreach (var c in container)
+                    WireControlEvents(c);
+            }
+        }
+
+        private void RedrawRequested(object sender, RedrawRequestedEventArgs eventArgs)
+        {
+            var control = sender as Control;
+
+            switch (eventArgs.Reason)
+            {
+                case RedrawRequestReason.BecameSmaller:
+                    control.Container.Drawer.Draw();
+                    break;
+                case RedrawRequestReason.BecameBigger:
+                case RedrawRequestReason.ContentChanged:
+                    control.Drawer.Draw();
+                    break;
+            }
         }
 
         private void Redraw()
         {
             var mainBoundary = new Rectangle(0, 0, Console.WindowHeight, Console.WindowWidth);
-            RootContainer.Drawer.Draw(0, 0, mainBoundary);
+            RootContainer.Drawer.Draw();
         }
 
         private void KeyWatcherOnKeyPressed(object sender, KeyPressedEventArgs eventArgs)
@@ -91,8 +162,6 @@ namespace FoggyConsole
                 if(DEBUG_MODE)
                     FogConsole.Write(0, Console.WindowHeight - 2, "Focused: " + FocusManager.FocusedControl.Name.PadRight(20), null, ConsoleColor.DarkGray);
             }
-
-            Redraw();
         }
     }
 }

@@ -28,7 +28,7 @@ namespace FoggyConsole.Controls
     /// Draws a <code>Panel</code>, which has no own appearance.
     /// All controls within the panel are drawn.
     /// </summary>
-    public class PanelDrawer : ControlDrawer<Panel>
+    public class PanelDrawer : ContainerControlDrawer<Panel>
     {
         private static readonly ConsoleColor[] DEBUG_COLORS = new[] { ConsoleColor.Blue, ConsoleColor.Red, ConsoleColor.Green, ConsoleColor.Cyan, ConsoleColor.Yellow };
         private static readonly DrawCharacterSet DEBUG_CHAR_SET = new DrawCharacterSet();
@@ -45,8 +45,7 @@ namespace FoggyConsole.Controls
         /// <exception cref="InvalidOperationException">Is thrown if the Control-Property isn't set.</exception>
         public override void Draw()
         {
-            if (Control == null)
-                throw new InvalidOperationException("Can't draw without the Control-Property set.");
+            base.Draw();
             if (Control.Width == 0 || Control.Height == 0)
                 return;
 
@@ -70,35 +69,6 @@ namespace FoggyConsole.Controls
             foreach (var control in _control)
             {
                 control.Drawer.Draw();
-            }
-        }
-
-        /// <summary>
-        /// Calculates the boundary of the Control given in the Control-Property and stores it in the Boundary-Property
-        /// </summary>
-        /// <param name="leftOffset">Offset for the left value (used to convert local coordinates within a container to global ones)</param>
-        /// <param name="topOffset">Offset for the top value (used to convert local coordinates within a container to global ones)</param>
-        /// <param name="boundary">The boundary of the <code>ContainerControl</code> in which the <code>Control</code> is placed</param>
-        public override void CalculateBoundary(int leftOffset, int topOffset, Rectangle boundary)
-        {
-            int left = leftOffset + Control.Left;
-            int top = topOffset + Control.Top;
-            int width = Control.Width;
-            int height = Control.Height;
-
-            if (left + width > boundary.Left + boundary.Width)
-                width = boundary.Width - (left - boundary.Left);
-            if (top + height > boundary.Top + boundary.Height)
-                height = boundary.Height - (top - boundary.Top);
-
-            Boundary = new Rectangle(left,
-                                     top,
-                                     height,
-                                     width);
-
-            foreach (var control in _control)
-            {
-                control.Drawer.CalculateBoundary(left, top, Boundary);
             }
         }
     }

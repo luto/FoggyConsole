@@ -64,6 +64,7 @@ namespace FoggyConsole.Controls
 
             this.Text = text;
             base.IsFocusedChanged += (sender, args) => RequestRedraw(RedrawRequestReason.ContentChanged);
+            base.Height = 1;
         }
 
         bool IInputHandler.HandleKeyInput(ConsoleKeyInfo keyInfo)
@@ -99,8 +100,7 @@ namespace FoggyConsole.Controls
         /// <exception cref="InvalidOperationException">Is thrown if the Control-Property isn't set.</exception>
         public override void Draw()
         {
-            if(Control == null)
-                throw new InvalidOperationException("Can't draw without the Control-Property set.");
+            base.Draw();
 
             var text = _control.Text;
             if (text.Length + 4 > Boundary.Width)
@@ -122,10 +122,9 @@ namespace FoggyConsole.Controls
         /// <param name="boundary">The boundary of the <code>ContainerControl</code> in which the <code>Control</code> is placed</param>
         public override void CalculateBoundary(int leftOffset, int topOffset, Rectangle boundary)
         {
-            Boundary = new Rectangle(leftOffset + Control.Left,
-                                     topOffset + Control.Top,
-                                     Control.Height,
-                                     (Control.Width == 0 ? _control.Text.Length : Control.Width) + 4);
+            base.CalculateBoundary(leftOffset, topOffset, boundary);
+            if(_control.Width == 0)
+                Boundary.Width = _control.Text.Length + 4;
         }
     }
 }

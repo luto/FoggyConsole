@@ -278,4 +278,49 @@ namespace FoggyConsole.Controls
             this.Control = control;
         }
     }
+
+    /// <summary>
+    /// Base class for all ControlDrawers which are able to draw a <code>ContainerControl</code>
+    /// </summary>
+    public abstract class ContainerControlDrawer<T> : ControlDrawer<T> where T : ContainerControl
+    {
+        /// <summary>
+        /// Creates a new ControlDrawer
+        /// </summary>
+        /// <param name="control">The Control to draw</param>
+        public ContainerControlDrawer(T control = null)
+            : base(control)
+        {
+        }
+
+
+        /// <summary>
+        /// Calculates the boundary of the Control given in the Control-Property and stores it in the Boundary-Property
+        /// </summary>
+        /// <param name="leftOffset">Offset for the left value (used to convert local coordinates within a container to global ones)</param>
+        /// <param name="topOffset">Offset for the top value (used to convert local coordinates within a container to global ones)</param>
+        /// <param name="boundary">The boundary of the <code>ContainerControl</code> in which the <code>Control</code> is placed</param>
+        public override void CalculateBoundary(int leftOffset, int topOffset, Rectangle boundary)
+        {
+            int left = leftOffset + Control.Left;
+            int top = topOffset + Control.Top;
+            int width = Control.Width;
+            int height = Control.Height;
+
+            if (left + width > boundary.Left + boundary.Width)
+                width = boundary.Width - (left - boundary.Left);
+            if (top + height > boundary.Top + boundary.Height)
+                height = boundary.Height - (top - boundary.Top);
+
+            Boundary = new Rectangle(left,
+                                     top,
+                                     height,
+                                     width);
+
+            foreach (var control in _control)
+            {
+                control.Drawer.CalculateBoundary(left, top, Boundary);
+            }
+        }
+    }
 }

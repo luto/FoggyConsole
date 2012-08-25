@@ -50,7 +50,15 @@ namespace FoggyConsole.Controls
         /// <summary>
         /// Draws the Control stored in the Control-Property
         /// </summary>
-        public abstract void Draw();
+        /// <exception cref="InvalidOperationException">Is thrown if the Control-Property isn't set.</exception>
+        /// <exception cref="InvalidOperationException">Is thrown if the CalculateBoundary-Method hasn't been called.</exception>
+        public virtual void Draw()
+        {
+            if (Control == null)
+                throw new InvalidOperationException("Can't draw without the Control-Property set.");
+            if (Boundary == null)
+                throw new InvalidOperationException("CalculateBoundary has to be called before Draw can be called.");
+        }
 
         /// <summary>
         /// Calculates the boundary of the Control given in the Control-Property and stores it in the Boundary-Property
@@ -58,6 +66,12 @@ namespace FoggyConsole.Controls
         /// <param name="leftOffset">Offset for the left value (used to convert local coordinates within a container to global ones)</param>
         /// <param name="topOffset">Offset for the top value (used to convert local coordinates within a container to global ones)</param>
         /// <param name="boundary">The boundary of the <code>ContainerControl</code> in which the <code>Control</code> is placed</param>
-        public abstract void CalculateBoundary(int leftOffset, int topOffset, Rectangle boundary);
+        public virtual void CalculateBoundary(int leftOffset, int topOffset, Rectangle boundary)
+        {
+            Boundary = new Rectangle(leftOffset + _control.Left,
+                                     topOffset  + _control.Top,
+                                     _control.Height,
+                                     _control.Width);
+        }
     }
 }

@@ -10,6 +10,8 @@ namespace FoggyConsole.Test
 {
     class Program
     {
+        private static Label lblStatus;
+
         static void Main(string[] args)
         {
             Console.CursorVisible = false;
@@ -24,10 +26,12 @@ namespace FoggyConsole.Test
             Button button0 = new Button("asd0") { Left = 1, Top = 1, Name = "asd0", TabIndex = 3 };
             Button button1 = new Button("asd1") { Left = 10, Top = 1, Name = "asd1", TabIndex =  2 };
             Button button2 = new Button("asd2") { Left = 15, Top = 2, Name = "asd2", TabIndex = 1 };
+            lblStatus = new Label("") { Left = 10, Top = 0, Width = 40, Align = ContentAlign.Center, Name = "lblStatus" };
             
             rootPanel.Add(button0);
             rootPanel.Add(button1);
             rootPanel.Add(button2);
+            rootPanel.Add(lblStatus);
 
             Panel innerPanel1 = new Panel();
             innerPanel1.Top = 5;
@@ -78,18 +82,23 @@ namespace FoggyConsole.Test
             rootPanel.Add(innerPanel1);
             rootPanel.Add(innerPanel2);
 
-            button0.Pressed += (sender, eventArgs) => (sender as Button).Text = "o";
-            button1.Pressed += (sender, eventArgs) => (sender as Button).Text = "o";
-            button2.Pressed += (sender, eventArgs) => (sender as Button).Text = "o";
-            button3.Pressed += (sender, eventArgs) => (sender as Button).Text = "o";
-            button4.Pressed += (sender, eventArgs) => (sender as Button).Text = "o";
-            button5.Pressed += (sender, eventArgs) => (sender as Button).Text = "o";
-            button6.Pressed += (sender, eventArgs) => (sender as Button).Text = "o";
-            button7.Pressed += (sender, eventArgs) => (sender as Button).Text = "o";
+            button0.Pressed += ButtonPressed;
+            button1.Pressed += ButtonPressed;
+            button2.Pressed += ButtonPressed;
+            button3.Pressed += ButtonPressed;
+            button4.Pressed += ButtonPressed;
+            button5.Pressed += ButtonPressed;
+            button6.Pressed += ButtonPressed;
+            button7.Pressed += ButtonPressed;
 
             Application app = new Application(rootPanel);
             app.FocusManager = new FocusManager(button0);
             app.Run();
+        }
+
+        private static void ButtonPressed(object sender, EventArgs eventArgs)
+        {
+            lblStatus.Text = "Button pressed: " + (sender as Control).Name;
         }
     }
 }

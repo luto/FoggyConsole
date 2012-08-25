@@ -44,14 +44,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Application.cs" />
+    <Compile Include="ContentAlign.cs" />
     <Compile Include="Controls\Button.cs" />
     <Compile Include="Controls\ContainerControl.cs" />
     <Compile Include="Controls\Control.cs" />
     <Compile Include="Controls\ControlDrawer.cs" />
     <Compile Include="Controls\IControlDrawer.cs" />
     <Compile Include="Controls\IInputHandler.cs" />
+    <Compile Include="Controls\Label.cs" />
     <Compile Include="Controls\Panel.cs" />
     <Compile Include="Controls\RedrawRequestedEventArgs.cs" />
+    <Compile Include="Controls\TextualBase.cs" />
     <Compile Include="DrawCharacterSet.cs" />
     <Compile Include="FocusManager.cs" />
     <Compile Include="FogConsole.cs" />

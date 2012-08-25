@@ -10,39 +10,8 @@ namespace FoggyConsole.Controls
     /// The standard look is: <example>[ Button Name ]</example> (drawn by <code>ButtonDrawer</code>).
     /// If Width is zero, the button will use as much space as required.
     /// </summary>
-    public class Button : Control, IInputHandler
+    public class Button : TextualBase, IInputHandler
     {
-        private string _text;
-
-        /// <summary>
-        /// Gets or sets the text which is drawn onto the Button.
-        /// </summary>
-        public string Text
-        {
-            get { return _text; }
-            set
-            {
-                int oldLen = _text == null ? 0 : _text.Length;
-                _text = value;
-
-                // if the width is zero the control will always take as much width
-                // as needed to draw the full text, so the text-lenght directly affects the size
-                if (Width == 0)
-                {
-                    if (_text.Length < oldLen)
-                        base.RequestRedraw(RedrawRequestReason.BecameSmaller);
-                    else if (_text.Length > oldLen)
-                        base.RequestRedraw(RedrawRequestReason.BecameBigger);
-                    else
-                        base.RequestRedraw(RedrawRequestReason.ContentChanged);
-                }
-            }
-        }
-        /// <summary>
-        /// Gets the standard height for buttons.
-        /// </summary>
-        public new int Height { get { return 1; } }
-
         /// <summary>
         /// Fired if the button is focuses and the user presses the space bar
         /// </summary>
@@ -52,19 +21,17 @@ namespace FoggyConsole.Controls
         /// Creates a new <code>Button</code>
         /// </summary>
         /// <param name="text">The text which is drawn onto the Button.</param>
-        /// <param name="drawer">The <code>ButtonDrawer</code> to use. If null a new instance of <code>ButtonDrawer</code> will be used.</param>
+        /// <param name="drawer">The <code>ControlDrawer</code> to use. If null a new instance of <code>ButtonDrawer</code> will be used.</param>
         /// <exception cref="ArgumentException">Thrown if the ButtonDrawer which should be set already has an other Button assigned</exception>
         public Button(string text, ControlDrawer<Button> drawer = null)
-            : base(drawer)
+            : base(text, drawer)
         {
-            if(text == null)
-                throw new ArgumentNullException("text");
             if(drawer == null)
                 base.Drawer = new ButtonDrawer(this);
 
-            this.Text = text;
             base.IsFocusedChanged += (sender, args) => RequestRedraw(RedrawRequestReason.ContentChanged);
             base.Height = 1;
+            base.IsHeightFixed = true;
         }
 
         bool IInputHandler.HandleKeyInput(ConsoleKeyInfo keyInfo)
@@ -98,6 +65,7 @@ namespace FoggyConsole.Controls
         /// Draws the <code>Button</code> given in the Control-Property.
         /// </summary>
         /// <exception cref="InvalidOperationException">Is thrown if the Control-Property isn't set.</exception>
+        /// <exception cref="InvalidOperationException">Is thrown if the CalculateBoundary-Method hasn't been called.</exception>
         public override void Draw()
         {
             base.Draw();
@@ -115,11 +83,11 @@ namespace FoggyConsole.Controls
         }
 
         /// <summary>
-        /// Calculates the boundary of the Control given in the Control-Property and stores it in the Boundary-Property
+        /// Calculates the boundary of the Button given in the Control-Property and stores it in the Boundary-Property
         /// </summary>
         /// <param name="leftOffset">Offset for the left value (used to convert local coordinates within a container to global ones)</param>
         /// <param name="topOffset">Offset for the top value (used to convert local coordinates within a container to global ones)</param>
-        /// <param name="boundary">The boundary of the <code>ContainerControl</code> in which the <code>Control</code> is placed</param>
+        /// <param name="boundary">The boundary of the <code>ContainerControl</code> in which the <code>Button</code> is placed</param>
         public override void CalculateBoundary(int leftOffset, int topOffset, Rectangle boundary)
         {
             base.CalculateBoundary(leftOffset, topOffset, boundary);

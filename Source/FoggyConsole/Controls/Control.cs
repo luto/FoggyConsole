@@ -16,6 +16,8 @@ namespace FoggyConsole.Controls
         private int _width;
         private int _height;
         private bool _isFocused;
+        private bool _isWidthFixed;
+        private bool _isHeightFixed;
 
         /// <summary>
         /// Distance from the top edge of its Container in characters
@@ -69,6 +71,8 @@ namespace FoggyConsole.Controls
             {
                 if (value < 0)
                     throw new ArgumentException("Width has to be bigger than zero.");
+                if (IsWidthFixed)
+                    throw new InvalidOperationException("The Width can't be changed.");
                 var oldWidth = _width;
 
                 _width = value;
@@ -90,6 +94,8 @@ namespace FoggyConsole.Controls
             {
                 if (value < 0)
                     throw new ArgumentException("Height has to be bigger than zero.");
+                if (IsHeightFixed)
+                    throw new InvalidOperationException("The Height can't be changed.");
                 var oldHeight = _height;
 
                 _height = value;
@@ -117,6 +123,24 @@ namespace FoggyConsole.Controls
                 _isFocused = value;
                 OnIsFocusedChanged();
             }
+        }
+
+        /// <summary>
+        /// True if the Width of this control can be changed
+        /// </summary>
+        public bool IsWidthFixed
+        {
+            get { return _isWidthFixed; }
+            protected set { _isWidthFixed = value; }
+        }
+
+        /// <summary>
+        /// True if the Height of this control can be changed
+        /// </summary>
+        public bool IsHeightFixed
+        {
+            get { return _isHeightFixed; }
+            protected set { _isHeightFixed = value; }
         }
 
         /// <summary>

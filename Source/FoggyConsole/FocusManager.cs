@@ -88,7 +88,7 @@ namespace FoggyConsole
                 return ((ContainerControl)control)[0];
             }
 
-            if(index == control.Container.Count - 1)
+            if (index == control.Container.Count - 1)
             {
                 return HandleTab(control.Container);
             }
@@ -101,7 +101,7 @@ namespace FoggyConsole
 
             // this *should* go well because it isn't possible to create an FocusManager
             // if there are no IInputHandler-Controls in the Application
-            while (foundControl is ContainerControl)
+            while (foundControl is ContainerControl || !(foundControl is IInputHandler))
                 foundControl = HandleTab(foundControl);
 
             return foundControl;
@@ -112,9 +112,11 @@ namespace FoggyConsole
             if (control.Container == null)
                 return -1;
 
-            for (int i = 0; i < control.Container.Count; i++)
+            var controls = control.Container.ToArray();
+
+            for (int i = 0; i < controls.Length; i++)
             {
-                if (control.Container[i] == control)
+                if (controls[i] == control)
                     return i;
             }
 

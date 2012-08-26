@@ -64,8 +64,6 @@ namespace FoggyConsole.Controls
             if(drawer == null)
                 base.Drawer = new LabelDrawer(this);
 
-            base.Height = 1;
-            base.IsHeightFixed = true;
             this.FColor = ConsoleColor.Gray;
             this.BColor = ConsoleColor.Black;
         }
@@ -131,6 +129,7 @@ namespace FoggyConsole.Controls
             base.CalculateBoundary(leftOffset, topOffset, boundary);
             if (_control.Width == 0)
                 Boundary.Width = _control.Text.Length;
+            FixBoundaryWidth(boundary);
         }
     }
 }

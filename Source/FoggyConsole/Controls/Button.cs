@@ -13,7 +13,7 @@ namespace FoggyConsole.Controls
     public class Button : TextualBase, IInputHandler
     {
         /// <summary>
-        /// Fired if the button is focuses and the user presses the space bar
+        /// Fired if the button is focused and the user presses the space bar
         /// </summary>
         public event EventHandler Pressed;
 
@@ -30,8 +30,6 @@ namespace FoggyConsole.Controls
                 base.Drawer = new ButtonDrawer(this);
 
             base.IsFocusedChanged += (sender, args) => RequestRedraw(RedrawRequestReason.ContentChanged);
-            base.Height = 1;
-            base.IsHeightFixed = true;
         }
 
         bool IInputHandler.HandleKeyInput(ConsoleKeyInfo keyInfo)
@@ -71,8 +69,8 @@ namespace FoggyConsole.Controls
             base.Draw();
 
             var text = _control.Text;
-            if (text.Length + 4 > Boundary.Width)
-                text = text.Substring(0, Boundary.Width - 4);
+            if (text.Length + 4 > Control.Width && Control.Width != 0)
+                text = text.Substring(0, Control.Width - 4);
 
             FogConsole.Write(Boundary.Left,
                              Boundary.Top,
@@ -93,6 +91,7 @@ namespace FoggyConsole.Controls
             base.CalculateBoundary(leftOffset, topOffset, boundary);
             if(_control.Width == 0)
                 Boundary.Width = _control.Text.Length + 4;
+            base.FixBoundaryWidth(boundary);
         }
     }
 }

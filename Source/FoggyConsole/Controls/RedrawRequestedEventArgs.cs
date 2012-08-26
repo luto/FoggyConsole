@@ -39,6 +39,10 @@ namespace FoggyConsole.Controls
         /// </summary>
         BecameBigger,
         /// <summary>
+        /// The control has been moved
+        /// </summary>
+        Moved,
+        /// <summary>
         /// The control-content changed
         /// </summary>
         ContentChanged

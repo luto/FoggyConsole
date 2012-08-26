@@ -6,7 +6,8 @@ using System.Text;
 namespace FoggyConsole.Controls
 {
     /// <summary>
-    /// Base class for <code>Label</code> und <code>Button</code>
+    /// Base class for <code>Label</code> und <code>Button</code>.
+    /// A control which is able to display a single line of text.
     /// </summary>
     public abstract class TextualBase : Control
     {
@@ -22,6 +23,8 @@ namespace FoggyConsole.Controls
             {
                 if (value == null)
                     throw new ArgumentNullException("text");
+                if (value.Any(c => c == '\n' || c == '\r'))
+                    throw new ArgumentException("Text can't contain linefeeds or carriage returns.", "text");
 
                 var oldText = _text;
                 _text = value;
@@ -49,6 +52,8 @@ namespace FoggyConsole.Controls
             : base(drawer)
         {
             Text = text;
+            base.Height = 1;
+            base.IsHeightFixed = true;
         }
     }
 }

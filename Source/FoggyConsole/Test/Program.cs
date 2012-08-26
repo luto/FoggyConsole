@@ -26,7 +26,7 @@ namespace FoggyConsole.Test
             Button button0 = new Button("asd0") { Left = 1, Top = 1, Name = "asd0", TabIndex = 3 };
             Button button1 = new Button("asd1") { Left = 10, Top = 1, Name = "asd1", TabIndex =  2 };
             Button button2 = new Button("asd2") { Left = 15, Top = 2, Name = "asd2", TabIndex = 1 };
-            lblStatus = new Label("") { Left = 10, Top = 0, Width = 40, Align = ContentAlign.Center, Name = "lblStatus" };
+            lblStatus = new Label("") { Left = 15, Top = 0, Width = 40, Align = ContentAlign.Center, Name = "lblStatus" };
             
             rootPanel.Add(button0);
             rootPanel.Add(button1);
@@ -99,6 +99,7 @@ namespace FoggyConsole.Test
         private static void ButtonPressed(object sender, EventArgs eventArgs)
         {
             lblStatus.Text = "Button pressed: " + (sender as Control).Name;
+            (sender as Control).Left++;
         }
     }
 }

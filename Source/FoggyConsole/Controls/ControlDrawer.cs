@@ -68,10 +68,40 @@ namespace FoggyConsole.Controls
         /// <param name="boundary">The boundary of the <code>ContainerControl</code> in which the <code>Control</code> is placed</param>
         public virtual void CalculateBoundary(int leftOffset, int topOffset, Rectangle boundary)
         {
-            Boundary = new Rectangle(leftOffset + _control.Left,
-                                     topOffset  + _control.Top,
-                                     _control.Height,
-                                     _control.Width);
+            int left = leftOffset + Control.Left;
+            int top = topOffset + Control.Top;
+            int width = Control.Width;
+            int height = Control.Height;
+
+            Boundary = new Rectangle(left,
+                                     top,
+                                     height,
+                                     width);
+
+            FixBoundaryHeight(boundary);
+            FixBoundaryWidth(boundary);
+        }
+
+        /// <summary>
+        /// Resizes the boundary-width to fit into <paramref name="containerBound"/>.
+        /// This should be called if the boundary-width gets changed after CalculateBoundary has been called.
+        /// </summary>
+        /// <param name="containerBound">The boundary of the <code>ContainerControl</code> which contains the control given in the Control-Property</param>
+        protected void FixBoundaryWidth(Rectangle containerBound)
+        {
+            if (Boundary.Left + Boundary.Width > containerBound.Left + containerBound.Width)
+                Boundary.Width = containerBound.Width - (Boundary.Left - containerBound.Left);
+        }
+
+        /// <summary>
+        /// Resizes the boundary-height to fit into <paramref name="containerBound"/>.
+        /// This should be called if the boundary-height gets changed after CalculateBoundary has been called.
+        /// </summary>
+        /// <param name="containerBound">The boundary of the <code>ContainerControl</code> which contains the control given in the Control-Property</param>
+        protected void FixBoundaryHeight(Rectangle containerBound)
+        {
+            if (Boundary.Top + Boundary.Height > containerBound.Top + containerBound.Height)
+                Boundary.Height = containerBound.Height - (Boundary.Top - containerBound.Top);
         }
     }
 }

@@ -33,10 +33,8 @@ namespace FoggyConsole.Controls
 
                 _top = value;
 
-                if (_top < oldTop)
-                    RequestRedraw(RedrawRequestReason.BecameSmaller);
-                else if (_top < oldTop)
-                    RequestRedraw(RedrawRequestReason.BecameBigger);
+                if (_top != oldTop)
+                    RequestRedraw(RedrawRequestReason.Moved);
             }
         }
         
@@ -54,10 +52,8 @@ namespace FoggyConsole.Controls
 
                 _left = value;
 
-                if (_left < oldLeft)
-                    RequestRedraw(RedrawRequestReason.BecameSmaller);
-                else if (_left < oldLeft)
-                    RequestRedraw(RedrawRequestReason.BecameBigger);
+                if (_left != oldLeft)
+                    RequestRedraw(RedrawRequestReason.Moved);
             }
         }
         

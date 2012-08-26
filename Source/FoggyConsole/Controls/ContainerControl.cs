@@ -302,24 +302,11 @@ namespace FoggyConsole.Controls
         /// <param name="boundary">The boundary of the <code>ContainerControl</code> in which the <code>Control</code> is placed</param>
         public override void CalculateBoundary(int leftOffset, int topOffset, Rectangle boundary)
         {
-            int left = leftOffset + Control.Left;
-            int top = topOffset + Control.Top;
-            int width = Control.Width;
-            int height = Control.Height;
-
-            if (left + width > boundary.Left + boundary.Width)
-                width = boundary.Width - (left - boundary.Left);
-            if (top + height > boundary.Top + boundary.Height)
-                height = boundary.Height - (top - boundary.Top);
-
-            Boundary = new Rectangle(left,
-                                     top,
-                                     height,
-                                     width);
+            base.CalculateBoundary(leftOffset, topOffset, boundary);
 
             foreach (var control in _control)
             {
-                control.Drawer.CalculateBoundary(left, top, Boundary);
+                control.Drawer.CalculateBoundary(Boundary.Left, Boundary.Top, Boundary);
             }
         }
     }

@@ -72,6 +72,18 @@ namespace FoggyConsole
             RootContainer.ControlRemoved += OnControlRemoved;
         }
 
+        /// <summary>
+        /// Stops this <code>Application</code>.
+        /// </summary>
+        public void Stop()
+        {
+            RemoveControlEvents(RootContainer);
+            KeyWatcher.KeyPressed -= KeyWatcherOnKeyPressed;
+            RootContainer.ControlAdded -= OnControlAdded;
+            RootContainer.ControlRemoved -= OnControlRemoved;
+            _running = false;
+        }
+
         private void OnControlAdded(object sender, ContainerControlEventArgs eventArgs)
         {
             WireControlEvents(eventArgs.Control);
@@ -127,13 +139,15 @@ namespace FoggyConsole
         {
             var control = sender as Control;
 
-            if(eventArgs.Reason == RedrawRequestReason.BecameSmaller ||
-               eventArgs.Reason == RedrawRequestReason.BecameBigger)
+            if (eventArgs.Reason == RedrawRequestReason.BecameSmaller ||
+               eventArgs.Reason == RedrawRequestReason.BecameBigger ||
+               eventArgs.Reason == RedrawRequestReason.Moved)
                 RootContainer.Drawer.CalculateBoundary(0, 0, new Rectangle(0, 0, Console.WindowHeight, Console.WindowWidth));
 
             switch (eventArgs.Reason)
             {
                 case RedrawRequestReason.BecameSmaller:
+                case RedrawRequestReason.Moved:
                     control.Container.Drawer.Draw();
                     break;
                 case RedrawRequestReason.BecameBigger:

@@ -57,18 +57,36 @@ namespace FoggyConsole.Controls
         }
     }
 
+    /// <summary>
+    /// Base class for all Drawers which can draw an <code>TextualBase</code>
+    /// </summary>
     public abstract class TextualBaseDrawer<T> : ControlDrawer<T> where T : TextualBase
     {
         private readonly string _format;
         private readonly int _addWidth;
 
+        /// <summary>
+        /// Creates a new TextualBaseDrawer
+        /// </summary>
+        /// <param name="control">The control to draw</param>
+        /// <param name="format">The format to use to format the objects given</param>
+        /// <param name="addWidth"></param>
+        /// <exception cref="ArgumentNullException">Is thrown if <paramref name="format"/> is null</exception>
         protected TextualBaseDrawer(T control, string format, int addWidth)
             : base(control)
         {
+            if(format == null)
+                throw new ArgumentNullException("format");
             this._format = format;
             this._addWidth = addWidth;
         }
 
+        /// <summary>
+        /// Draws the objects given in <paramref name="args"/> using the format string given in the ctor
+        /// </summary>
+        /// <param name="fColor">The foreground color</param>
+        /// <param name="bColor">The background color</param>
+        /// <param name="args">The objects to draw</param>
         protected void Draw(ConsoleColor fColor, ConsoleColor bColor, params object[] args)
         {
             var text = String.Format(_format, new object[] { _control.Text }.Concat(args).ToArray());

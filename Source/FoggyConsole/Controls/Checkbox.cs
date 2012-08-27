@@ -5,21 +5,50 @@ using System.Text;
 
 namespace FoggyConsole.Controls
 {
+    /// <summary>
+    /// A control which displays a Text and has a Checked-State
+    /// </summary>
     public class Checkbox : TextualBase, IInputHandler
     {
+        /// <summary>
+        /// All possible states for <code>Checkbox</code>
+        /// </summary>
         public enum CheckState
         {
+            /// <summary>
+            /// The checkbox is checked
+            /// </summary>
             Checked,
+            /// <summary>
+            /// The checkbox is unchecked
+            /// </summary>
             Unchecked,
+            /// <summary>
+            /// The checkbox is in an indeterminate state,
+            /// can be used to force to user to actively select one state
+            /// </summary>
             Indeterminate
         }
 
-        public class CheckboxCheckedChangedEventArgs : EventArgs
+        /// <summary>
+        /// Contains information about an occuring status-change of a <code>Checkbox</code>
+        /// </summary>
+        public class CheckboxCheckedChangingEventArgs : EventArgs
         {
+            /// <summary>
+            /// The state the Checkbox is going to have
+            /// </summary>
             public CheckState State { get; private set; }
+            /// <summary>
+            /// True if the change should be canceled, otherwise false
+            /// </summary>
             public bool Cancel { get; set; }
 
-            public CheckboxCheckedChangedEventArgs(CheckState state)
+            /// <summary>
+            /// Creates a new <code>CheckboxCheckedChangingEventArg</code>
+            /// </summary>
+            /// <param name="state">The state the Checkbox is going to have</param>
+            public CheckboxCheckedChangingEventArgs(CheckState state)
             {
                 this.State = state;
                 this.Cancel = false;
@@ -29,15 +58,28 @@ namespace FoggyConsole.Controls
 
         private CheckState _checked;
         /// <summary>
-        /// 
+        /// Gets or sets the state of this checkbox
         /// </summary>
         public CheckState Checked
         {
             get { return _checked; }
-            set { _checked = value; }
+            set
+            {
+                var cancel = OnCheckedChanged(value);
+                if (!cancel)
+                {
+                    Checked = value;
+                    RequestRedraw(RedrawRequestReason.ContentChanged);
+                }
+            }
         }
 
 
+        /// <summary>
+        /// Creates a new Checkbox
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="drawer">The <code>ControlDrawer</code> to use. If null a new instance of <code>CheckboxDrawer</code> will be used.</param>
         public Checkbox(string text, ControlDrawer<Checkbox> drawer = null)
             : base(text, drawer)
         {
@@ -47,23 +89,27 @@ namespace FoggyConsole.Controls
             base.IsFocusedChanged += (sender, args) => RequestRedraw(RedrawRequestReason.ContentChanged);
         }
 
-        private event EventHandler<CheckboxCheckedChangedEventArgs> CheckedChanged;
+        /// <summary>
+        /// Fired if the Checked-State of this checkbox is going to change
+        /// </summary>
+        private event EventHandler<CheckboxCheckedChangingEventArgs> CheckedChanging;
 
         /// <summary>
-        /// Retruns 
+        /// Fires the CheckedChanging-event and returns true if the process should be canceled
         /// </summary>
-        /// <param name="state"></param>
-        /// <returns></returns>
+        /// <param name="state">The state the checkbox is going to have</param>
+        /// <returns>True if the process should be canceled, otherwise false</returns>
         private bool OnCheckedChanged(CheckState state)
         {
-            var args = new CheckboxCheckedChangedEventArgs(state);
-            if (CheckedChanged != null)
-                CheckedChanged(this, args);
+            var args = new CheckboxCheckedChangingEventArgs(state);
+            if (CheckedChanging != null)
+                CheckedChanging(this, args);
             return args.Cancel;
         }
 
         /// <summary>
-        /// Handles the key-userinput which is given in <paramref name="keyInfo"/>
+        /// Handles the key-userinput which is given in <paramref name="keyInfo"/>.
+        /// The Checked-State will flip if the user presses the spacebar.
         /// </summary>
         /// <returns>true if the keypress was handled, otherwise false</returns>
         /// <param name="keyInfo">The keypress to handle</param>
@@ -85,19 +131,16 @@ namespace FoggyConsole.Controls
                         // stupid C#-compiler is stupid, will never happen.
                         throw new ArgumentOutOfRangeException();
                 }
-
-                bool cancel = OnCheckedChanged(newState);
-                if (!cancel)
-                {
-                    Checked = newState;
-                    RequestRedraw(RedrawRequestReason.ContentChanged);
-                }
+                Checked = newState;
                 return true;
             }
             return false;
         }
     }
 
+    /// <summary>
+    /// Draws a <code>Checkbox</code>-Control
+    /// </summary>
     public class CheckboxDrawer : TextualBaseDrawer<Checkbox>
     {
         public CheckboxDrawer(Checkbox control = null)
@@ -105,6 +148,9 @@ namespace FoggyConsole.Controls
         {
         }
 
+        /// <summary>
+        /// Draws the checkbox given in the Control-Property
+        /// </summary>
         public override void Draw()
         {
             base.Draw();
@@ -128,7 +174,13 @@ namespace FoggyConsole.Controls
                       checkChar);
 
             if(_control.Checked == Checkbox.CheckState.Indeterminate)
-                FogConsole.Write(Boundary.Left + 1, Boundary.Top, checkChar.ToString(), Boundary, bColor: Control.IsFocused ? ConsoleColor.Black : ConsoleColor.Gray);
+            {
+                // overwrites the character which indicates the checked-state of the checkbox,
+                // to have an inverted background-color
+                FogConsole.Write(Boundary.Left + 1, Boundary.Top,
+                                 checkChar.ToString(), Boundary,
+                                 bColor: Control.IsFocused ? ConsoleColor.Black : ConsoleColor.Gray);
+            }
         }
     }
 }

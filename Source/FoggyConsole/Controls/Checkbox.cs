@@ -68,7 +68,7 @@ namespace FoggyConsole.Controls
                 var cancel = OnCheckedChanged(value);
                 if (!cancel)
                 {
-                    Checked = value;
+                    _checked = value;
                     RequestRedraw(RedrawRequestReason.ContentChanged);
                 }
             }
@@ -92,7 +92,7 @@ namespace FoggyConsole.Controls
         /// <summary>
         /// Fired if the Checked-State of this checkbox is going to change
         /// </summary>
-        private event EventHandler<CheckboxCheckedChangingEventArgs> CheckedChanging;
+        public event EventHandler<CheckboxCheckedChangingEventArgs> CheckedChanging;
 
         /// <summary>
         /// Fires the CheckedChanging-event and returns true if the process should be canceled

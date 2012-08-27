@@ -72,10 +72,10 @@ namespace FoggyConsole.Controls
     /// <summary>
     /// Draws a <code>Label</code>-Control
     /// </summary>
-    public class LabelDrawer : ControlDrawer<Label>
+    public class LabelDrawer : TextualBaseDrawer<Label>
     {
         public LabelDrawer(Label control)
-            : base(control)
+            : base(control, "{1}", 0)
         {
         }
 
@@ -110,26 +110,7 @@ namespace FoggyConsole.Controls
                 }
             }
 
-            FogConsole.Write(Boundary.Left,
-                             Boundary.Top,
-                             text,
-                             Boundary,
-                             _control.FColor,
-                             _control.BColor);
-        }
-
-        /// <summary>
-        /// Calculates the boundary of the Label given in the Control-Property and stores it in the Boundary-Property
-        /// </summary>
-        /// <param name="leftOffset">Offset for the left value (used to convert local coordinates within a container to global ones)</param>
-        /// <param name="topOffset">Offset for the top value (used to convert local coordinates within a container to global ones)</param>
-        /// <param name="boundary">The boundary of the <code>ContainerControl</code> in which the <code>Label</code> is placed</param>
-        public override void CalculateBoundary(int leftOffset, int topOffset, Rectangle boundary)
-        {
-            base.CalculateBoundary(leftOffset, topOffset, boundary);
-            if (_control.Width == 0)
-                Boundary.Width = _control.Text.Length;
-            FixBoundaryWidth(boundary);
+            base.Draw(_control.FColor, _control.BColor, text);
         }
     }
 }

@@ -27,6 +27,9 @@ namespace FoggyConsole.Test
             Button button1 = new Button("asd1") { Left = 10, Top = 1, Name = "asd1", TabIndex =  2 };
             Button button2 = new Button("asd2") { Left = 15, Top = 2, Name = "asd2", TabIndex = 1 };
             lblStatus = new Label("") { Left = 15, Top = 0, Width = 40, Align = ContentAlign.Center, Name = "lblStatus" };
+
+            Checkbox cb0 = new Checkbox("foobar") { Left = 1, Top = 2, Name = "cb0" };
+            rootPanel.Add(cb0);
             
             rootPanel.Add(button0);
             rootPanel.Add(button1);
@@ -92,7 +95,7 @@ namespace FoggyConsole.Test
             button7.Pressed += ButtonPressed;
 
             Application app = new Application(rootPanel);
-            app.FocusManager = new FocusManager(button0);
+            app.FocusManager = new FocusManager(cb0);
             app.Run();
         }
 

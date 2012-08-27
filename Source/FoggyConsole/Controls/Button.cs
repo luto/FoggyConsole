@@ -52,10 +52,10 @@ namespace FoggyConsole.Controls
     /// <summary>
     /// Draws a <code>Button</code>-Control
     /// </summary>
-    public class ButtonDrawer : ControlDrawer<Button>
+    public class ButtonDrawer : TextualBaseDrawer<Button>
     {
         public ButtonDrawer(Button control = null)
-            : base(control)
+            : base(control, "[ {0} ]", 4)
         {
         }
 
@@ -67,31 +67,8 @@ namespace FoggyConsole.Controls
         public override void Draw()
         {
             base.Draw();
-
-            var text = _control.Text;
-            if (text.Length + 4 > Control.Width && Control.Width != 0)
-                text = text.Substring(0, Control.Width - 4);
-
-            FogConsole.Write(Boundary.Left,
-                             Boundary.Top,
-                             "[ " + text + " ]",
-                             Boundary,
-                             Control.IsFocused ? ConsoleColor.Black : ConsoleColor.Gray,
-                             Control.IsFocused ? ConsoleColor.Gray : ConsoleColor.Black);
-        }
-
-        /// <summary>
-        /// Calculates the boundary of the Button given in the Control-Property and stores it in the Boundary-Property
-        /// </summary>
-        /// <param name="leftOffset">Offset for the left value (used to convert local coordinates within a container to global ones)</param>
-        /// <param name="topOffset">Offset for the top value (used to convert local coordinates within a container to global ones)</param>
-        /// <param name="boundary">The boundary of the <code>ContainerControl</code> in which the <code>Button</code> is placed</param>
-        public override void CalculateBoundary(int leftOffset, int topOffset, Rectangle boundary)
-        {
-            base.CalculateBoundary(leftOffset, topOffset, boundary);
-            if(_control.Width == 0)
-                Boundary.Width = _control.Text.Length + 4;
-            base.FixBoundaryWidth(boundary);
+            base.Draw(Control.IsFocused ? ConsoleColor.Black : ConsoleColor.Gray,
+                      Control.IsFocused ? ConsoleColor.Gray : ConsoleColor.Black);
         }
     }
 }

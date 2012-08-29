@@ -19,6 +19,11 @@ namespace FoggyConsole
         /// Enables some debugging options, such as drawing panels with background and displaying pressed keys
         /// </summary>
         public static bool DEBUG_MODE = true;
+
+        /// <summary>
+        /// Used as the boundary for the rootContainer if the terminal-size can't determined
+        /// </summary>
+        public static Rectangle STANDARD_ROOT_BOUNDARY = new Rectangle(0, 0, 25, 80);
         
         private bool _running = false;
         private FocusManager _focusManager;
@@ -63,13 +68,16 @@ namespace FoggyConsole
         /// </summary>
         public void Run()
         {
+            CalculateRootBound();
+            Console.Clear();
+            RootContainer.Drawer.Draw();
+
             WireControlEvents(RootContainer);
-            RootContainer.Drawer.CalculateBoundary(0, 0, new Rectangle(0, 0, Console.WindowHeight, Console.WindowWidth));
-            _running = true;
-            Redraw();
             KeyWatcher.KeyPressed += KeyWatcherOnKeyPressed;
             RootContainer.ControlAdded += OnControlAdded;
             RootContainer.ControlRemoved += OnControlRemoved;
+
+            _running = true;
         }
 
         /// <summary>
@@ -82,6 +90,17 @@ namespace FoggyConsole
             RootContainer.ControlAdded -= OnControlAdded;
             RootContainer.ControlRemoved -= OnControlRemoved;
             _running = false;
+        }
+
+        private void CalculateRootBound()
+        {
+            var rootBound = STANDARD_ROOT_BOUNDARY;
+            // Size dedection will work on windows and on most unix-systems
+            // mono uses the same values for Window- and Buffer-Properties,
+            // so it doesn't matter which values are used.
+            if (Console.WindowHeight != 0)
+                rootBound = new Rectangle(0, 0, Console.WindowHeight, Console.WindowWidth);
+            RootContainer.Drawer.CalculateBoundary(0, 0, rootBound);
         }
 
         private void OnControlAdded(object sender, ContainerControlEventArgs eventArgs)
@@ -137,12 +156,12 @@ namespace FoggyConsole
 
         private void RedrawRequested(object sender, RedrawRequestedEventArgs eventArgs)
         {
-            var control = sender as Control;
+            var control = (Control)sender;
 
             if (eventArgs.Reason == RedrawRequestReason.BecameSmaller ||
-               eventArgs.Reason == RedrawRequestReason.BecameBigger ||
-               eventArgs.Reason == RedrawRequestReason.Moved)
-                RootContainer.Drawer.CalculateBoundary(0, 0, new Rectangle(0, 0, Console.WindowHeight, Console.WindowWidth));
+                eventArgs.Reason == RedrawRequestReason.BecameBigger  ||
+                eventArgs.Reason == RedrawRequestReason.Moved)
+                CalculateRootBound();
 
             switch (eventArgs.Reason)
             {
@@ -155,12 +174,6 @@ namespace FoggyConsole
                     control.Drawer.Draw();
                     break;
             }
-        }
-
-        private void Redraw()
-        {
-            var mainBoundary = new Rectangle(0, 0, Console.WindowHeight, Console.WindowWidth);
-            RootContainer.Drawer.Draw();
         }
 
         private void KeyWatcherOnKeyPressed(object sender, KeyPressedEventArgs eventArgs)

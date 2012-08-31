@@ -27,6 +27,9 @@ namespace FoggyConsole.Test
             rootPanel.Header = "I'm a header!";
             rootPanel.ForeColor = ConsoleColor.White;
 
+            Textbox txt = new Textbox() { Left = 0, Top = 0, Width = 20, Name = "txt" };
+            rootPanel.Add(txt);
+
             Button button0 = new Button("asd0") { Left = 1, Top = 1, Name = "asd0", TabIndex = 3 };
             Button button1 = new Button("asd1") { Left = 10, Top = 1, Name = "asd1", TabIndex =  2 };
             Button button2 = new Button("asd2") { Left = 15, Top = 2, Name = "asd2", TabIndex = 1 };
@@ -117,7 +120,7 @@ namespace FoggyConsole.Test
             button7.Pressed += ButtonPressed;
 
             Application app = new Application(rootPanel);
-            app.FocusManager = new FocusManager(cb0);
+            app.FocusManager = new FocusManager(txt);
             app.Run();
         }
 

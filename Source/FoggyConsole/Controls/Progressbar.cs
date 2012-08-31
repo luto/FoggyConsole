@@ -23,9 +23,14 @@ namespace FoggyConsole.Controls
                 if (value < 0 || value > 100)
                     throw new ArgumentOutOfRangeException("value");
                 _value = value;
-                RequestRedraw(RedrawRequestReason.ContentChanged);
+                OnValueChanged();
             }
         }
+
+        /// <summary>
+        /// Fired if the Value-Property has changed
+        /// </summary>
+        public event EventHandler ValueChanged;
 
         /// <summary>
         /// Creates a new Progressbar
@@ -39,6 +44,16 @@ namespace FoggyConsole.Controls
                 Drawer = new ProgressBarDrawer(this);
             this.Height = 1;
             this.IsHeightFixed = true;
+        }
+
+        /// <summary>
+        /// Fires the ValueChanged-event and requests an redraw
+        /// </summary>
+        private void OnValueChanged()
+        {
+            RequestRedraw(RedrawRequestReason.ContentChanged);
+            if (ValueChanged != null)
+                ValueChanged(this, EventArgs.Empty);
         }
     }
 

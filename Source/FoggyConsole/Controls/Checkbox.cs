@@ -65,14 +65,24 @@ namespace FoggyConsole.Controls
             get { return _checked; }
             set
             {
-                var cancel = OnCheckedChanged(value);
+                var cancel = OnCheckedChanging(value);
                 if (!cancel)
                 {
                     _checked = value;
-                    RequestRedraw(RedrawRequestReason.ContentChanged);
+                    OnCheckedChanged();
                 }
             }
         }
+
+        /// <summary>
+        /// Fired if the Checked-Property is going to change
+        /// </summary>
+        public event EventHandler<CheckboxCheckedChangingEventArgs> CheckedChanging;
+
+        /// <summary>
+        /// Fired if the Checked-Property has been changed
+        /// </summary>
+        public event EventHandler CheckedChanged;
 
 
         /// <summary>
@@ -91,21 +101,26 @@ namespace FoggyConsole.Controls
         }
 
         /// <summary>
-        /// Fired if the Checked-State of this checkbox is going to change
-        /// </summary>
-        public event EventHandler<CheckboxCheckedChangingEventArgs> CheckedChanging;
-
-        /// <summary>
         /// Fires the CheckedChanging-event and returns true if the process should be canceled
         /// </summary>
         /// <param name="state">The state the checkbox is going to have</param>
         /// <returns>True if the process should be canceled, otherwise false</returns>
-        private bool OnCheckedChanged(CheckState state)
+        private bool OnCheckedChanging(CheckState state)
         {
             var args = new CheckboxCheckedChangingEventArgs(state);
             if (CheckedChanging != null)
                 CheckedChanging(this, args);
             return args.Cancel;
+        }
+
+        /// <summary>
+        /// Fires the CheckedChanged-event and requests an redraw
+        /// </summary>
+        private void OnCheckedChanged()
+        {
+            RequestRedraw(RedrawRequestReason.ContentChanged);
+            if (CheckedChanged != null)
+                CheckedChanged(this, EventArgs.Empty);
         }
 
         /// <summary>

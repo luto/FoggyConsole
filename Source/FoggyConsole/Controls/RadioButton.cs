@@ -8,31 +8,31 @@ namespace FoggyConsole.Controls
     /// <summary>
     /// A checkbox-like control of which only one in a group can be checked at at the same time
     /// </summary>
-    public class Combobox : CheckableBase
+    public class RadioButton : CheckableBase
     {
         /// <summary>
-        /// The group this Combobox belongs to
+        /// The group this RadioButton belongs to
         /// </summary>
         public string ComboboxGroup { get; set; }
 
         /// <summary>
-        /// Creates a new Combobox
+        /// Creates a new RadioButton
         /// </summary>
         /// <param name="text">The text to display</param>
-        /// <param name="drawer">The <code>ControlDrawer</code> to use. If null a new instance of <code>ComboboxDrawer</code> will be used.</param>
+        /// <param name="drawer">The <code>ControlDrawer</code> to use. If null a new instance of <code>RadioButtonDrawer</code> will be used.</param>
         /// <exception cref="ArgumentException">Thrown if the <code>ControlDrawer</code> which should be set already has an other Control assigned</exception>
-        public Combobox(string text, ControlDrawer<Combobox> drawer = null)
+        public RadioButton(string text, ControlDrawer<RadioButton> drawer = null)
             : base(text, drawer)
         {
             if(drawer == null)
-                base.Drawer = new ComboboxDrawer(this);
+                base.Drawer = new RadioButtonDrawer(this);
             this.Checked = CheckState.Unchecked;
             this.CheckedChanging += OnCheckedChanging;
         }
 
         private void OnCheckedChanging(object sender, CheckedChangingEventArgs checkedChangingEventArgs)
         {
-            var groupBoxes = Container.OfType<Combobox>()
+            var groupBoxes = Container.OfType<RadioButton>()
                                       .Where(cb => cb.ComboboxGroup == ComboboxGroup);
             
             foreach (var cb in groupBoxes)
@@ -44,11 +44,11 @@ namespace FoggyConsole.Controls
     }
 
     /// <summary>
-    /// Draws a Combobox
+    /// Draws a RadioButton
     /// </summary>
-    public class ComboboxDrawer : CheckableBaseDrawer<Combobox>
+    public class RadioButtonDrawer : CheckableBaseDrawer<RadioButton>
     {
-        public ComboboxDrawer(Combobox control)
+        public RadioButtonDrawer(RadioButton control)
             : base(control, "({1}) {0}")
         {
         }

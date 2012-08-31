@@ -6,7 +6,7 @@ using System.Text;
 namespace FoggyConsole.Controls
 {
     /// <summary>
-    /// Base class for <code>Checkbox</code> and <code>Combobox</code>
+    /// Base class for <code>Checkbox</code> and <code>RadioButton</code>
     /// </summary>
     public abstract class CheckableBase : TextualBase, IInputHandler
     {
@@ -144,7 +144,7 @@ namespace FoggyConsole.Controls
     }
 
     /// <summary>
-    /// Base class for <code>ComboboxDrawer</code> and <code>CheckboxDrawer</code>
+    /// Base class for <code>RadioButtonDrawer</code> and <code>CheckboxDrawer</code>
     /// </summary>
     public class CheckableBaseDrawer<T> : TextualBaseDrawer<T> where T : CheckableBase
     {

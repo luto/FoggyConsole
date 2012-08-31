@@ -42,12 +42,12 @@ namespace FoggyConsole.Test
 
             for (int i = 0; i < 3; i++)
             {
-                var cc = new Combobox("foobar" + i) { Left = 35, Top = i + 1, Name = "cc" + i, ComboboxGroup = "grp1" };
+                var cc = new RadioButton("foobar" + i) { Left = 35, Top = i + 1, Name = "cc" + i, ComboboxGroup = "grp1" };
                 rootPanel.Add(cc);
             }
             for (int i = 0; i < 3; i++)
             {
-                var cc = new Combobox("foobar" + i) { Left = 48, Top = i + 1, Name = "cc" + i, ComboboxGroup = "grp2" };
+                var cc = new RadioButton("foobar" + i) { Left = 48, Top = i + 1, Name = "cc" + i, ComboboxGroup = "grp2" };
                 rootPanel.Add(cc);
             }
 

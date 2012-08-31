@@ -80,6 +80,7 @@ namespace FoggyConsole.Controls
         /// </summary>
         /// <param name="text"></param>
         /// <param name="drawer">The <code>ControlDrawer</code> to use. If null a new instance of <code>CheckboxDrawer</code> will be used.</param>
+        /// <exception cref="ArgumentException">Thrown if the <code>ControlDrawer</code> which should be set already has an other Control assigned</exception>
         public Checkbox(string text, ControlDrawer<Checkbox> drawer = null)
             : base(text, drawer)
         {

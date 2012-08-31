@@ -57,6 +57,7 @@
     <Compile Include="Controls\IInputHandler.cs" />
     <Compile Include="Controls\Label.cs" />
     <Compile Include="Controls\Panel.cs" />
+    <Compile Include="Controls\Progressbar.cs" />
     <Compile Include="Controls\RedrawRequestedEventArgs.cs" />
     <Compile Include="Controls\TextualBase.cs" />
     <Compile Include="DrawCharacterSet.cs" />

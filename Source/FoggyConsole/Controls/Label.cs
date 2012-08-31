@@ -30,6 +30,7 @@ namespace FoggyConsole.Controls
         /// </summary>
         /// <param name="text">The text on the Label</param>
         /// <param name="drawer">The <code>ControlDrawer</code> to use. If null a new instance of <code>LabelDrawer</code> will be used.</param>
+        /// <exception cref="ArgumentException">Thrown if the <code>ControlDrawer</code> which should be set already has an other Control assigned</exception>
         public Label(string text, IControlDrawer drawer = null)
             : base(text, drawer)
         {

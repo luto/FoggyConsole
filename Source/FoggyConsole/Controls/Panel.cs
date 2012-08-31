@@ -15,7 +15,7 @@ namespace FoggyConsole.Controls
         /// Creates a new <code>Panel</code>
         /// </summary>
         /// <param name="drawer">The <code>ControlDrawer</code> to use. If null a new instance of <code>PanelDrawer</code> will be used.</param>
-        /// <exception cref="ArgumentException">Thrown if the PanelDrawer which should be set already has an other Panel assigned</exception>
+        /// <exception cref="ArgumentException">Thrown if the <code>ControlDrawer</code> which should be set already has an other Control assigned</exception>
         public Panel(ControlDrawer<Panel> drawer = null)
             : base(drawer)
         {

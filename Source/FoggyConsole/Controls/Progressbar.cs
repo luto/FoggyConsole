@@ -73,6 +73,9 @@ namespace FoggyConsole.Controls
             ProgressChar = '|';
         }
 
+        /// <summary>
+        /// Draws the Progressbar given in the Control-Property
+        /// </summary>
         public override void Draw()
         {
             base.Draw();

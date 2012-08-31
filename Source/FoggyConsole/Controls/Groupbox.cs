@@ -62,6 +62,9 @@ namespace FoggyConsole.Controls
             CharacterSet = DrawCharacterSet.GetSingleLinesSet();
         }
 
+        /// <summary>
+        /// Draws the Groupbox given in the Control-Property
+        /// </summary>
         public override void Draw()
         {
             base.Draw();
@@ -80,6 +83,9 @@ namespace FoggyConsole.Controls
             }
         }
 
+        /// <summary>
+        /// Calculates the boundary of all childen, only allows them to draw inside the border
+        /// </summary>
         protected override void CalcuateChildBoundaries()
         {
             var innerBound = new Rectangle(Boundary.Left + 1, Boundary.Top + 1, Boundary.Height - 2, Boundary.Width - 2);

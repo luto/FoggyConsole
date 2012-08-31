@@ -49,7 +49,9 @@
     <Compile Include="Application.cs" />
     <Compile Include="ContentAlign.cs" />
     <Compile Include="Controls\Button.cs" />
+    <Compile Include="Controls\CheckableBase.cs" />
     <Compile Include="Controls\Checkbox.cs" />
+    <Compile Include="Controls\Combobox.cs" />
     <Compile Include="Controls\ContainerControl.cs" />
     <Compile Include="Controls\Control.cs" />
     <Compile Include="Controls\ControlDrawer.cs" />

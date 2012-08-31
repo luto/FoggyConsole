@@ -68,6 +68,7 @@
     <Compile Include="FocusManager.cs" />
     <Compile Include="FogConsole.cs" />
     <Compile Include="KeyWatcher.cs" />
+    <Compile Include="Test\ConsoleBenchmark.cs" />
     <Compile Include="Test\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -128,6 +128,7 @@ namespace FoggyConsole.Controls
         /// <param name="item">The object to add to the <see cref="T:System.Collections.Generic.ICollection`1"/>.</param><exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Generic.ICollection`1"/> is read-only.</exception>
         public void Add(Control item)
         {
+            CheckControl(item);
             _controls.Add(item);
             OnControlAdded(item);
         }
@@ -232,6 +233,7 @@ namespace FoggyConsole.Controls
         /// <param name="index">The zero-based index at which <paramref name="item"/> should be inserted.</param><param name="item">The object to insert into the <see cref="T:System.Collections.Generic.IList`1"/>.</param><exception cref="T:System.ArgumentOutOfRangeException"><paramref name="index"/> is not a valid index in the <see cref="T:System.Collections.Generic.IList`1"/>.</exception><exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Generic.IList`1"/> is read-only.</exception>
         public void Insert(int index, Control item)
         {
+            CheckControl(item);
             _controls.Insert(index, item);
             OnControlAdded(item);
         }
@@ -247,6 +249,27 @@ namespace FoggyConsole.Controls
             OnControlRemoved(c);
         }
         #endregion
+
+        /// <summary>
+        /// Check is the <code>Control</code>&nbsp;<paramref name="c"/> meets this conditions:
+        /// <list type="bullet">
+        ///     <item><description><paramref name="c"/> is not null</description></item>
+        ///     <item><description><paramref name="c"/>.Name is not null and is not empty</description></item>
+        ///     <item><description>There is no other control with the name of <paramref name="c"/> within this container</description></item>
+        /// </list>
+        /// </summary>
+        /// <param name="c">The <code>Control</code> to check</param>
+        /// <exception cref="ArgumentNullException">Is thrown if <paramref name="c"/> is null</exception>
+        /// <exception cref="ArgumentException">Is thrown if <paramref name="c"/> doesn't meet one of the conditions</exception>
+        private void CheckControl(Control c)
+        {
+            if (c == null)
+                throw new ArgumentNullException();
+            if (string.IsNullOrEmpty(c.Name))
+                throw new ArgumentException("Control has to have a name");
+            if (this.Any(cc => cc.Name == c.Name))
+                throw new ArgumentException("Control with same name already exists in this container");
+        }
 
         /// <summary>
         /// Fired if a control gets added to this container

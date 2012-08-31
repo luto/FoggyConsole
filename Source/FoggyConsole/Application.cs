@@ -49,6 +49,7 @@ namespace FoggyConsole
         /// The root of the Control-Tree
         /// </summary>
         public ContainerControl RootContainer { get; private set; }
+
         /// <summary>
         /// Responsible for focus-changes, for example when the user presses the TAB-key
         /// </summary>
@@ -63,6 +64,10 @@ namespace FoggyConsole
             }
         }
 
+        /// <summary>
+        /// The name of this application
+        /// </summary>
+        public string Name { get; set; }
 
         /// <summary>
         /// Creates a new Application
@@ -85,6 +90,10 @@ namespace FoggyConsole
         /// </summary>
         public void Run()
         {
+            Console.CursorVisible = false;
+            Console.Title = Name;
+            Console.Clear();
+
             CalculateRootBound();
             Console.Clear();
             RootContainer.Drawer.Draw();

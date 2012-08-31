@@ -14,9 +14,8 @@ namespace FoggyConsole.Test
 
         static void Main(string[] args)
         {
-            Console.CursorVisible = false;
-
             Application.DEBUG_MODE = true;
+
 
             var rootPanel = new Groupbox();
             rootPanel.Top = 3;
@@ -27,34 +26,27 @@ namespace FoggyConsole.Test
             rootPanel.Header = "I'm a header!";
             rootPanel.ForeColor = ConsoleColor.White;
 
-            Textbox txt = new Textbox() { Left = 0, Top = 0, Width = 20, Name = "txt" };
-            rootPanel.Add(txt);
-
+            Textbox txt = new Textbox { Left = 0, Top = 0, Width = 20, Name = "txt" };
             Button button0 = new Button("asd0") { Left = 1, Top = 1, Name = "asd0", TabIndex = 3 };
             Button button1 = new Button("asd1") { Left = 10, Top = 1, Name = "asd1", TabIndex =  2 };
             Button button2 = new Button("asd2") { Left = 15, Top = 2, Name = "asd2", TabIndex = 1 };
             lblStatus = new Label("") { Left = 15, Top = 0, Width = 40, Align = ContentAlign.Center, Name = "lblStatus", BackColor = ConsoleColor.Green, ForeColor = ConsoleColor.DarkBlue };
-            Progressbar bar = new Progressbar();
-            bar.Top = 3;
-            bar.Left = 20;
-            bar.Width = 15;
-            bar.Value = 100;
-
+            Progressbar bar = new Progressbar { Top = 3, Left = 20, Width = 15, Value = 100, Name = "bar" };
             Checkbox cb0 = new Checkbox("foobar") { Left = 1, Top = 2, Name = "cb0" };
+
+            for (int i = 0; i < 3; i++)
+            {
+                var cc = new RadioButton("foobar" + i) { Left = 35, Top = i + 1, Name = "ccG1" + i, ComboboxGroup = "grp1" };
+                rootPanel.Add(cc);
+            }
+            for (int i = 0; i < 3; i++)
+            {
+                var cc = new RadioButton("foobar" + i) { Left = 48, Top = i + 1, Name = "ccG2" + i, ComboboxGroup = "grp2" };
+                rootPanel.Add(cc);
+            }
+
+            rootPanel.Add(txt);
             rootPanel.Add(cb0);
-
-            for (int i = 0; i < 3; i++)
-            {
-                var cc = new RadioButton("foobar" + i) { Left = 35, Top = i + 1, Name = "cc" + i, ComboboxGroup = "grp1" };
-                rootPanel.Add(cc);
-            }
-            for (int i = 0; i < 3; i++)
-            {
-                var cc = new RadioButton("foobar" + i) { Left = 48, Top = i + 1, Name = "cc" + i, ComboboxGroup = "grp2" };
-                rootPanel.Add(cc);
-            }
-
-
             rootPanel.Add(button0);
             rootPanel.Add(button1);
             rootPanel.Add(button2);
@@ -70,7 +62,6 @@ namespace FoggyConsole.Test
 
             Button button3 = new Button("asd3") { Left = 2, Top = 2, Name = "asd3" };
             innerPanel1.Add(button3);
-
 
 
             Panel innerPanel2 = new Panel();
@@ -119,8 +110,11 @@ namespace FoggyConsole.Test
             button6.Pressed += ButtonPressed;
             button7.Pressed += ButtonPressed;
 
-            Application app = new Application(rootPanel);
+
+
+            var app = new Application(rootPanel);
             app.FocusManager = new FocusManager(txt);
+            app.Name = "FoggyConsole";
             app.Run();
         }
 

@@ -96,7 +96,7 @@ namespace FoggyConsole
 
             Write(rect.Left, rect.Top, topLine, null, fColor, bColor);
             var bottomLineTop = rect.Top + rect.Height - 1;
-            if(boundary != null && bottomLineTop < boundary.Top + boundary.Height)
+            if(boundary == null || bottomLineTop < boundary.Top + boundary.Height)
                 Write(rect.Left, bottomLineTop, bottomLine, null, fColor, bColor);
             #endregion
 
@@ -138,7 +138,7 @@ namespace FoggyConsole
                 {
                     Write(rect.Left, rect.Top + i, charSet.VerticalEdge, null, fColor, bColor);
                     var left = rect.Left + rect.Width - 1;
-                    if(boundary != null && left < boundary.Left + boundary.Width)
+                    if(boundary == null || left < boundary.Left + boundary.Width)
                         Write(left, rect.Top + i, charSet.VerticalEdge, null, fColor, bColor);
                 }
                 if(fill)

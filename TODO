@@ -3,9 +3,7 @@ The order is the order in wich I'm going to implement them, variations may occur
 
 Stuff:
 	Choose a license
-	Groupbox
 	RadioButton
-	Progressbar
 	Global-Menu
 	Calendar
 	Hide cursor on MacOS
@@ -19,5 +17,5 @@ Stuff:
 			password-mode
 		Listbox
 			different types of controls in one list
-	TreeView
 	Grid
+	TreeView

@@ -302,7 +302,14 @@ namespace FoggyConsole.Controls
         public override void CalculateBoundary(int leftOffset, int topOffset, Rectangle boundary)
         {
             base.CalculateBoundary(leftOffset, topOffset, boundary);
+            CalcuateChildBoundaries();
+        }
 
+        /// <summary>
+        /// Calculates the boundaries of all children widthin the ContainerControl
+        /// </summary>
+        protected virtual void CalcuateChildBoundaries()
+        {
             foreach (var control in _control)
             {
                 control.Drawer.CalculateBoundary(Boundary.Left, Boundary.Top, Boundary);

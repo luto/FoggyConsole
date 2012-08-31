@@ -53,6 +53,7 @@
     <Compile Include="Controls\ContainerControl.cs" />
     <Compile Include="Controls\Control.cs" />
     <Compile Include="Controls\ControlDrawer.cs" />
+    <Compile Include="Controls\Groupbox.cs" />
     <Compile Include="Controls\IControlDrawer.cs" />
     <Compile Include="Controls\IInputHandler.cs" />
     <Compile Include="Controls\Label.cs" />

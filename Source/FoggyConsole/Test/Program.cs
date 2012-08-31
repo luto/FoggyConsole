@@ -18,12 +18,13 @@ namespace FoggyConsole.Test
 
             Application.DEBUG_MODE = true;
 
-            Panel rootPanel = new Panel();
+            var rootPanel = new Groupbox();
             rootPanel.Top = 3;
             rootPanel.Left = 3;
             rootPanel.Width = 70;
             rootPanel.Height = 17;
             rootPanel.Name = "rootPanel";
+            rootPanel.Header = "I'm a header!";
             rootPanel.ForeColor = ConsoleColor.White;
 
             Button button0 = new Button("asd0") { Left = 1, Top = 1, Name = "asd0", TabIndex = 3 };

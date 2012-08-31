@@ -67,8 +67,8 @@ namespace FoggyConsole.Controls
         public override void Draw()
         {
             base.Draw();
-            base.Draw(Control.IsFocused ? ConsoleColor.Black : ConsoleColor.Gray,
-                      Control.IsFocused ? ConsoleColor.Gray : ConsoleColor.Black);
+            base.Draw(Control.IsFocused ? Control.BackColor : Control.ForeColor,
+                      Control.IsFocused ? Control.ForeColor : Control.BackColor);
         }
     }
 }

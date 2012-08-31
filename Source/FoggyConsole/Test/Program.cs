@@ -16,12 +16,15 @@ namespace FoggyConsole.Test
         {
             Console.CursorVisible = false;
 
+            Application.DEBUG_MODE = true;
+
             Panel rootPanel = new Panel();
             rootPanel.Top = 3;
             rootPanel.Left = 3;
             rootPanel.Width = 70;
             rootPanel.Height = 17;
             rootPanel.Name = "rootPanel";
+            rootPanel.ForeColor = ConsoleColor.White;
 
             Button button0 = new Button("asd0") { Left = 1, Top = 1, Name = "asd0", TabIndex = 3 };
             Button button1 = new Button("asd1") { Left = 10, Top = 1, Name = "asd1", TabIndex =  2 };

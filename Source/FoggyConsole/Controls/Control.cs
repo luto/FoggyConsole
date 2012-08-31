@@ -15,9 +15,12 @@ namespace FoggyConsole.Controls
         private int _left;
         private int _width;
         private int _height;
+        private ConsoleColor _backColor;
+        private ConsoleColor _foreColor;
+        private bool _backColorSet;
+        private bool _foreColorSet;
         private bool _isFocused;
-        private bool _isWidthFixed;
-        private bool _isHeightFixed;
+        private ContainerControl _container;
 
         /// <summary>
         /// Distance from the top edge of its Container in characters
@@ -102,6 +105,34 @@ namespace FoggyConsole.Controls
                     RequestRedraw(RedrawRequestReason.BecameBigger);
             }
         }
+
+        /// <summary>
+        /// The background-color
+        /// </summary>
+        public ConsoleColor BackColor
+        {
+            get { return _backColor; }
+            set
+            {
+                _backColor = value;
+                _backColorSet = true;
+                RequestRedraw(RedrawRequestReason.ContentChanged);
+            }
+        }
+
+        /// <summary>
+        /// The foreground-color
+        /// </summary>
+        public ConsoleColor ForeColor
+        {
+            get { return _foreColor; }
+            set
+            {
+                _foreColor = value;
+                _foreColorSet = true;
+                RequestRedraw(RedrawRequestReason.ContentChanged);
+            }
+        }
         
         /// <summary>
         /// The name of this Control, must be unique within its Container
@@ -124,20 +155,12 @@ namespace FoggyConsole.Controls
         /// <summary>
         /// True if the Width of this control can be changed
         /// </summary>
-        public bool IsWidthFixed
-        {
-            get { return _isWidthFixed; }
-            protected set { _isWidthFixed = value; }
-        }
+        public bool IsWidthFixed { get; protected set; }
 
         /// <summary>
         /// True if the Height of this control can be changed
         /// </summary>
-        public bool IsHeightFixed
-        {
-            get { return _isHeightFixed; }
-            protected set { _isHeightFixed = value; }
-        }
+        public bool IsHeightFixed { get; protected set; }
 
         /// <summary>
         /// Used to determine the order of controls when the user uses the TAB-key navigate between them
@@ -147,7 +170,18 @@ namespace FoggyConsole.Controls
         /// <summary>
         /// The <code>ContainerControl</code> in which this Control is placed in
         /// </summary>
-        public ContainerControl Container { get; set; }
+        public ContainerControl Container
+        {
+            get { return _container; }
+            set
+            {
+                if(value != null)
+                {
+                    SetControlColors(this, value.ForeColor, value.BackColor);
+                }
+                _container = value;
+            }
+        }
 
         /// <summary>
         /// An instance of a subclass of <code>ControlDrawer</code> which is able to draw this specific type of Control
@@ -203,6 +237,27 @@ namespace FoggyConsole.Controls
         public Control(IControlDrawer drawer)
         {
             Drawer = drawer;
+            _foreColor = ConsoleColor.Gray;
+        }
+
+        /// <summary>
+        /// Sets the color of <paramref name="c"/> and all its sub-controls to <paramref name="fColor"/> and <paramref name="bColor"/>
+        /// </summary>
+        /// <param name="c">The control to set the color of</param>
+        /// <param name="fColor">The foreground color to set</param>
+        /// <param name="bColor">The background color to set</param>
+        private void SetControlColors(Control c, ConsoleColor fColor, ConsoleColor bColor)
+        {
+            if (!c._foreColorSet) c._foreColor = fColor;
+            if (!c._backColorSet) c._backColor = bColor;
+
+            if (c is ContainerControl)
+            {
+                foreach (var cc in c as ContainerControl)
+                {
+                    SetControlColors(cc, fColor, bColor);
+                }
+            }
         }
     }
 }

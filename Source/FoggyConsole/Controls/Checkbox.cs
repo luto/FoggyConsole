@@ -169,8 +169,8 @@ namespace FoggyConsole.Controls
                     throw new ArgumentOutOfRangeException();
             }
 
-            base.Draw(Control.IsFocused ? ConsoleColor.Black : ConsoleColor.Gray,
-                      Control.IsFocused ? ConsoleColor.Gray : ConsoleColor.Black,
+            base.Draw(Control.IsFocused ? Control.BackColor : Control.ForeColor,
+                      Control.IsFocused ? Control.ForeColor : Control.BackColor,
                       checkChar);
 
             if(_control.Checked == Checkbox.CheckState.Indeterminate)

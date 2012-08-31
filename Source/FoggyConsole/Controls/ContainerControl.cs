@@ -111,7 +111,6 @@ namespace FoggyConsole.Controls
         /// <param name="item">The object to add to the <see cref="T:System.Collections.Generic.ICollection`1"/>.</param><exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Generic.ICollection`1"/> is read-only.</exception>
         public void Add(Control item)
         {
-            item.Container = this;
             _controls.Add(item);
             OnControlAdded(item);
         }

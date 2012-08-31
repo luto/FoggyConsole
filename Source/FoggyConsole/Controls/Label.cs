@@ -10,35 +10,7 @@ namespace FoggyConsole.Controls
     /// </summary>
     public class Label : TextualBase
     {
-        private ConsoleColor _bColor;
-        private ConsoleColor _fColor;
         private ContentAlign _align;
-
-        /// <summary>
-        /// The background-color
-        /// </summary>
-        public ConsoleColor BColor
-        {
-            get { return _bColor; }
-            set
-            {
-                _bColor = value;
-                RequestRedraw(RedrawRequestReason.ContentChanged);
-            }
-        }
-
-        /// <summary>
-        /// The foreground-color
-        /// </summary>
-        public ConsoleColor FColor
-        {
-            get { return _fColor; }
-            set
-            {
-                _fColor = value;
-                RequestRedraw(RedrawRequestReason.ContentChanged);
-            }
-        }
 
         /// <summary>
         /// The align of the text
@@ -63,9 +35,6 @@ namespace FoggyConsole.Controls
         {
             if(drawer == null)
                 base.Drawer = new LabelDrawer(this);
-
-            this.FColor = ConsoleColor.Gray;
-            this.BColor = ConsoleColor.Black;
         }
     }
 
@@ -110,7 +79,7 @@ namespace FoggyConsole.Controls
                 }
             }
 
-            base.Draw(_control.FColor, _control.BColor, text);
+            base.Draw(Control.ForeColor, Control.BackColor, text);
         }
     }
 }

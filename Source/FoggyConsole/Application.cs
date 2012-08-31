@@ -18,7 +18,7 @@ namespace FoggyConsole
         /// <summary>
         /// Enables some debugging options, such as drawing panels with background and displaying pressed keys
         /// </summary>
-        public static bool DEBUG_MODE = true;
+        public static bool DEBUG_MODE = false;
 
         /// <summary>
         /// Used as the boundary for the rootContainer if the terminal-size can't determined

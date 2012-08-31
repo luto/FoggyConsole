@@ -50,22 +50,35 @@ namespace FoggyConsole.Controls
             if (Control.Width == 0 || Control.Height == 0)
                 return;
 
+            var boxBound = new Rectangle(Boundary.Left,
+                                         Boundary.Top,
+                                         Control.Height,
+                                         Control.Width);
+            ConsoleColor boxColor;
+
             if (Application.DEBUG_MODE)
             {
-                var boxBound = new Rectangle(Boundary.Left,
-                                             Boundary.Top,
-                                             Control.Height,
-                                             Control.Width);
+                boxColor = DEBUG_COLORS[DEBUG_COLOR_COUNTER];
 
-                FogConsole.DrawBox(boxBound, DEBUG_CHAR_SET, Boundary,
-                                   bColor: DEBUG_COLORS[DEBUG_COLOR_COUNTER],
-                                   bFillColor: DEBUG_COLORS[DEBUG_COLOR_COUNTER],
-                                   fill: true);
-                FogConsole.Write(Boundary.Left, Boundary.Top, "{" + _control.Name + "}", Boundary, ConsoleColor.Black, DEBUG_COLORS[DEBUG_COLOR_COUNTER]);
                 DEBUG_COLOR_COUNTER++;
                 if (DEBUG_COLOR_COUNTER == DEBUG_COLORS.Length)
                     DEBUG_COLOR_COUNTER = 0;
             }
+            else
+            {
+                boxColor = Control.BackColor;
+            }
+
+            FogConsole.DrawBox(boxBound, DEBUG_CHAR_SET, Boundary,
+                               bColor: boxColor,
+                               bFillColor: boxColor,
+                               fill: true);
+
+            if (Application.DEBUG_MODE)
+                FogConsole.Write(Boundary.Left,
+                                 Boundary.Top,
+                                 "{" + _control.Name + "}",
+                                 Boundary, Control.ForeColor, boxColor);
 
             foreach (var control in _control)
             {

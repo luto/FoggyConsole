@@ -62,10 +62,13 @@ namespace FoggyConsole
             }
 
             // check for changed values, only set what is needed (huge performance plus)
-            if (left != _left)
-                Console.CursorLeft = left;
-            if (top != _top)
-                Console.CursorTop = top;
+            // Console.CursorLeft and Console.CursorTop get the other value and call
+            // SetCursorPosition, which just sets both values directly.
+            // That means that SetCursorPosition will always be faster,
+            // up to 3,5x times as fast on my system.
+            // See ConsoleBenchmark.cs for detailed results.
+            if (left != _left || top != _top)
+                Console.SetCursorPosition(left, top);
             if (fColor != _fColor)
                 Console.ForegroundColor = fColor;
             if (bColor != _bColor)

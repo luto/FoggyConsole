@@ -27,17 +27,39 @@ namespace FoggyConsole.Controls
     /// </summary>
     public class Textbox : TextualBase, IInputHandler
     {
-        private int _cursorPos;
+        private int _cursorPosition;
+        private char _passwordChar;
+        private bool _passwordMode;
 
         /// <summary>
         /// The position of the cursor within the textbox
         /// </summary>
-        public int CursorPos
+        public int CursorPosition
         {
-            get { return _cursorPos; }
+            get { return _cursorPosition; }
             private set
             {
-                _cursorPos = value;
+                _cursorPosition = value;
+                RequestRedraw(RedrawRequestReason.ContentChanged);
+            }
+        }
+
+        public char PasswordChar
+        {
+            get { return _passwordChar; }
+            set
+            {
+                _passwordChar = value;
+                RequestRedraw(RedrawRequestReason.ContentChanged);
+            }
+        }
+
+        public bool PasswordMode
+        {
+            get { return _passwordMode; }
+            set
+            {
+                _passwordMode = value;
                 RequestRedraw(RedrawRequestReason.ContentChanged);
             }
         }
@@ -53,6 +75,7 @@ namespace FoggyConsole.Controls
             if(drawer == null)
                 base.Drawer = new TextboxDrawer(this);
             this.IsFocusedChanged += (sender, args) => RequestRedraw(RedrawRequestReason.ContentChanged);
+            this.PasswordChar = '*';
         }
 
         /// <summary>
@@ -73,13 +96,13 @@ namespace FoggyConsole.Controls
                     return false;
 
                 case ConsoleKey.RightArrow:
-                    if (CursorPos < Text.Length)
-                        CursorPos++;
+                    if (CursorPosition < Text.Length)
+                        CursorPosition++;
                     break;
 
                 case ConsoleKey.LeftArrow:
-                    if (CursorPos > 0)
-                        CursorPos--;
+                    if (CursorPosition > 0)
+                        CursorPosition--;
                     break;
 
                 case ConsoleKey.Backspace:
@@ -88,16 +111,16 @@ namespace FoggyConsole.Controls
                         string newStr = null;
                         char c = keyInfo.KeyChar;
 
-                        if (CursorPos == this.Text.Length)
+                        if (CursorPosition == this.Text.Length)
                             newStr = this.Text.Substring(0, this.Text.Length - 1);
                         else
                         {
-                            if (CursorPos == 0)
+                            if (CursorPosition == 0)
                                 return true;
-                            newStr = Text.Substring(0, CursorPos - 1) + Text.Substring(CursorPos);
+                            newStr = Text.Substring(0, CursorPosition - 1) + Text.Substring(CursorPosition);
                         }
 
-                        CursorPos--;
+                        CursorPosition--;
                         this.Text = newStr;
                     }
                     break;
@@ -108,12 +131,12 @@ namespace FoggyConsole.Controls
                         string newStr = null;
                         char c = keyInfo.KeyChar;
 
-                        if (CursorPos == this.Text.Length)
+                        if (CursorPosition == this.Text.Length)
                             newStr = Text + c;
                         else
-                            newStr = Text.Substring(0, CursorPos) + c + Text.Substring(CursorPos);
+                            newStr = Text.Substring(0, CursorPosition) + c + Text.Substring(CursorPosition);
 
-                        CursorPos++;
+                        CursorPosition++;
                         this.Text = newStr;
                     }
                     break;
@@ -139,11 +162,32 @@ namespace FoggyConsole.Controls
         public override void Draw()
         {
             base.Draw();
-            base.Draw(Control.ForeColor, Control.BackColor, _control.Text.PadRight(Control.Width));
+            string text = null;
+
+            if(!_control.PasswordMode)
+                text = _control.Text;
+            else
+                text = new string(_control.PasswordChar, _control.Text.Length);
+            text = text.PadRight(Control.Width);
+
+            base.Draw(Control.ForeColor, Control.BackColor, text);
+
             if(Control.IsFocused)
             {
-                char cc = _control.CursorPos < _control.Text.Length ? _control.Text[_control.CursorPos] : ' ';
-                FogConsole.Write(Boundary.Left + _control.CursorPos, Boundary.Top, cc, Boundary, Control.BackColor, Control.ForeColor);
+                char cc;
+                if(_control.CursorPosition < _control.Text.Length)
+                {
+                    if(_control.PasswordMode)
+                        cc = _control.PasswordChar;
+                    else
+                        cc = _control.Text[_control.CursorPosition];
+                }
+                else
+                {
+                    cc = ' ';
+                }
+
+                FogConsole.Write(Boundary.Left + _control.CursorPosition, Boundary.Top, cc, Boundary, Control.BackColor, Control.ForeColor);
             }
         }
     }

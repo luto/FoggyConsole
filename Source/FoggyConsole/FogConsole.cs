@@ -55,7 +55,7 @@ namespace FoggyConsole
                 int lastCharLeft = left + str.Length;
                 int lastAllowedCharLeft = boundary.Left + boundary.Width;
 
-                if (left > lastAllowedCharLeft) // string is complitly out of view
+                if (left > lastAllowedCharLeft) // string is completely out of view
                     return;
                 if (lastCharLeft > lastAllowedCharLeft) // string is partially out of view
                     str = str.Substring(0, boundary.Width - (left - boundary.Left));

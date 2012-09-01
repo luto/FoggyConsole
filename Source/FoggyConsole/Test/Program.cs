@@ -26,11 +26,11 @@ namespace FoggyConsole.Test
             rootPanel.Header = "I'm a header!";
             rootPanel.ForeColor = ConsoleColor.White;
 
-            Textbox txt = new Textbox { Left = 0, Top = 0, Width = 20, Name = "txt" };
+            Textbox txt = new Textbox { Left = 0, Top = 0, Width = 20, Name = "txt", BackColor = ConsoleColor.Gray, ForeColor = ConsoleColor.Black, PasswordMode = true };
             Button button0 = new Button("asd0") { Left = 1, Top = 1, Name = "asd0", TabIndex = 3 };
             Button button1 = new Button("asd1") { Left = 10, Top = 1, Name = "asd1", TabIndex =  2 };
             Button button2 = new Button("asd2") { Left = 15, Top = 2, Name = "asd2", TabIndex = 1 };
-            lblStatus = new Label("") { Left = 15, Top = 0, Width = 40, Align = ContentAlign.Center, Name = "lblStatus", BackColor = ConsoleColor.Green, ForeColor = ConsoleColor.DarkBlue };
+            lblStatus = new Label("") { Left = 15, Top = 5, Width = 40, Align = ContentAlign.Center, Name = "lblStatus", BackColor = ConsoleColor.Green, ForeColor = ConsoleColor.DarkBlue };
             Progressbar bar = new Progressbar { Top = 3, Left = 20, Width = 15, Value = 100, Name = "bar" };
             Checkbox cb0 = new Checkbox("foobar") { Left = 1, Top = 2, Name = "cb0" };
 

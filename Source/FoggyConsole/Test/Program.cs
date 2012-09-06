@@ -48,17 +48,62 @@ namespace FoggyConsole.Test
             btnLeftClear.Name = "btnLeftClear";
             btnLeftClear.Pressed += (sender, eventArgs) => lblLeftStatusText.Text = "";
 
+            var txtLeftText = new Textbox();
+            txtLeftText.Text = "asd123";
+            txtLeftText.Top = 3;
+            txtLeftText.Left = 21;
+            txtLeftText.Width = 10;
+            txtLeftText.BackColor = ConsoleColor.Gray;
+            txtLeftText.ForeColor = ConsoleColor.Black;
+            txtLeftText.Name = "txtLeftText";
+
+            var btnLeftSetText = new Button("Set this text =>");
+            btnLeftSetText.Top = 3;
+            btnLeftSetText.Name = "btnLeftSetText";
+            btnLeftSetText.Pressed += (sender, eventArgs) => lblLeftStatusText.Text = txtLeftText.Text;
+
+            var chkLeftMoveDir = new Checkbox("Move button up");
+            chkLeftMoveDir.Top = 5;
+            chkLeftMoveDir.Left = 12;
+            chkLeftMoveDir.Name = "chkLeftMoveDir";
+            chkLeftMoveDir.Checked = CheckState.Unchecked;
+
+            var prgLeftMoveButton = new Progressbar();
+            prgLeftMoveButton.Top = 6;
+            prgLeftMoveButton.Left = 12;
+            prgLeftMoveButton.Name = "prgLeftMoveButton";
+            prgLeftMoveButton.Width = chkLeftMoveDir.Text.Length + 4;
+            prgLeftMoveButton.Value = 10;
+
+            var lblLeftPrgDesc = new Label(@"^ Progressbar ^");
+            lblLeftPrgDesc.Top = 7;
+            lblLeftPrgDesc.Left = 14;
+            lblLeftPrgDesc.Name = "lblLeftPrgDesc";
+
             var btnLeftMove = new Button("Move");
-            btnLeftMove.Top = 3;
+            btnLeftMove.Top = 4;
             btnLeftMove.Name = "btnLeftMove";
-            btnLeftMove.Pressed += (sender, eventArgs) => btnLeftMove.Top++;
+            btnLeftMove.Pressed += (sender, eventArgs) =>
+                {
+                    var mv = chkLeftMoveDir.Checked == CheckState.Checked ? -1 : 1;
+                    if(btnLeftMove.Top + mv < btnLeftMove.Container.Height - 3 &&
+                       btnLeftMove.Top + mv > 3)
+                        btnLeftMove.Top += mv;
+                    prgLeftMoveButton.Value = (int)(((btnLeftMove.Top - 2) / (float)(btnLeftMove.Container.Height - 6)) * 100);
+                };
+
 
 
             leftBox.Add(lblLeftStatus);
             leftBox.Add(lblLeftStatusText);
             leftBox.Add(btnLeftIncrement);
             leftBox.Add(btnLeftClear);
+            leftBox.Add(btnLeftSetText);
+            leftBox.Add(txtLeftText);
             leftBox.Add(btnLeftMove);
+            leftBox.Add(chkLeftMoveDir);
+            leftBox.Add(prgLeftMoveButton);
+            leftBox.Add(lblLeftPrgDesc);
             #endregion
 
             #region Right Side
@@ -69,6 +114,39 @@ namespace FoggyConsole.Test
             rightBox.Left = mainPanel.Width / 2;
             rightBox.Width = mainPanel.Width / 2;
             rightBox.Height = mainPanel.Height;
+
+            var rightRightBox = new Groupbox();
+            rightRightBox.Name = "rightRightBox";
+            rightRightBox.Header = "Checkbox!";
+            rightRightBox.Top = 1;
+            rightRightBox.Width = rightBox.Width / 2 - 2;
+            rightRightBox.Height = 8;
+            for (int i = 0; i < 4; i++)
+                rightRightBox.Add(new Checkbox("Foo" + i) { Name = "foo" + i, Top = i });
+
+            var rightLeftBox = new Groupbox();
+            rightLeftBox.Name = "rightLeftBox";
+            rightLeftBox.Header = "Radiobutton!";
+            rightLeftBox.Top = 1;
+            rightLeftBox.Left = rightBox.Width / 2 - 2;
+            rightLeftBox.Width = rightBox.Width / 2 + 2;
+            rightLeftBox.Height = 8;
+            for (int i = 0; i < 4; i++)
+                rightLeftBox.Add(new RadioButton("Bar" + i) { Name = "bar" + i, Top = i });
+
+            var lblRightRadioDesc = new Label("Radiobuttons can have groups:");
+            lblRightRadioDesc.Top = rightLeftBox.Height + 2;
+            lblRightRadioDesc.Name = "lblDesc";
+            for (int i = 0; i < 6; i++)
+                rightBox.Add(new RadioButton("asd" + i) { Text = "Group" + (i / 3),
+                                                          Name = "chk" + i.ToString(),
+                                                          Top = (i % 3) + rightRightBox.Height + 3,
+                                                          Left = (i / 3) * 15 + 2,
+                                                          ComboboxGroup = "grp" + (i / 3) });
+
+            rightBox.Add(rightRightBox);
+            rightBox.Add(rightLeftBox);
+            rightBox.Add(lblRightRadioDesc);
             #endregion
 
             mainPanel.Add(leftBox);

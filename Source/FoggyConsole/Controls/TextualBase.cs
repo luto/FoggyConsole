@@ -108,8 +108,8 @@ namespace FoggyConsole.Controls
         {
             var text = String.Format(_format, new object[] { _control.Text }.Concat(args).ToArray());
 
-            if (text.Length + 4 > Control.Width && Control.Width != 0)
-                text = text.Substring(0, Control.Width - 4);
+            if (text.Length + _addWidth > Control.Width && Control.Width != 0)
+                text = text.Substring(0, Control.Width - _addWidth);
 
             FogConsole.Write(Boundary.Left, Boundary.Top, text, Boundary, fColor, bColor);
         }

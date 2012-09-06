@@ -48,7 +48,7 @@ namespace FoggyConsole.Controls
         /// <param name="text">The text on the Label</param>
         /// <param name="drawer">The <code>ControlDrawer</code> to use. If null a new instance of <code>LabelDrawer</code> will be used.</param>
         /// <exception cref="ArgumentException">Thrown if the <code>ControlDrawer</code> which should be set already has an other Control assigned</exception>
-        public Label(string text, IControlDrawer drawer = null)
+        public Label(string text = "", IControlDrawer drawer = null)
             : base(text, drawer)
         {
             if(drawer == null)
@@ -84,14 +84,14 @@ namespace FoggyConsole.Controls
             {
                 switch (_control.Align)
                 {
-                    case ContentAlign.Right:
+                    case ContentAlign.Left:
                         text = text.PadRight(Boundary.Width);
                         break;
                     case ContentAlign.Center:
                         var fillStr = new string(' ', (Boundary.Width - text.Length)/2);
                         text = fillStr + text + fillStr;
                     break;
-                    case ContentAlign.Left:
+                    case ContentAlign.Right:
                         text = text.PadLeft(Boundary.Width);
                         break;
                 }

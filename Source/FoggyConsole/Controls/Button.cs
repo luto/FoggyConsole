@@ -40,7 +40,7 @@ namespace FoggyConsole.Controls
         /// <param name="text">The text which is drawn onto the Button.</param>
         /// <param name="drawer">The <code>ControlDrawer</code> to use. If null a new instance of <code>ButtonDrawer</code> will be used.</param>
         /// <exception cref="ArgumentException">Thrown if the <code>ControlDrawer</code> which should be set already has an other Control assigned</exception>
-        public Button(string text, ControlDrawer<Button> drawer = null)
+        public Button(string text = "", ControlDrawer<Button> drawer = null)
             : base(text, drawer)
         {
             if(drawer == null)

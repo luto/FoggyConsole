@@ -103,6 +103,9 @@ namespace FoggyConsole
                                    ConsoleColor fColor = ConsoleColor.Gray, ConsoleColor bColor = ConsoleColor.Black,
                                    bool fill = false, ConsoleColor fFillColor = ConsoleColor.Gray, ConsoleColor bFillColor = ConsoleColor.Black)
         {
+            if(rect.Width == 0 || rect.Height == 0)
+                return;
+
             #region Corners
             var topLine = charSet.TopLeftCorner + new string(charSet.HorizontalEdge, rect.Width - 2) + charSet.TopRightCorner;
             var bottomLine = charSet.BottomLeftCorner + new string(charSet.HorizontalEdge, rect.Width - 2) + charSet.BottomRightCorner;

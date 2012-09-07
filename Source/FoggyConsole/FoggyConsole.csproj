@@ -51,6 +51,7 @@
     <Compile Include="Controls\Button.cs" />
     <Compile Include="Controls\CheckableBase.cs" />
     <Compile Include="Controls\Checkbox.cs" />
+    <Compile Include="Controls\Playground.cs" />
     <Compile Include="Controls\RadioButton.cs" />
     <Compile Include="Controls\ContainerControl.cs" />
     <Compile Include="Controls\Control.cs" />

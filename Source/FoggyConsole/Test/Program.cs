@@ -80,6 +80,20 @@ namespace FoggyConsole.Test
             lblLeftPrgDesc.Left = 14;
             lblLeftPrgDesc.Name = "lblLeftPrgDesc";
 
+            var myPlayground = new Playground(7, 14);
+            myPlayground.Name = "playground";
+            myPlayground.Top = 9;
+            myPlayground.Left = 14;
+            myPlayground.BackColor = ConsoleColor.Blue;
+            myPlayground.ForeColor = ConsoleColor.Red;
+            myPlayground[0, 0] = 'x';
+            myPlayground[2, 2] = 'x';
+            myPlayground[4, 4] = 'x';
+            myPlayground[6, 6] = 'o';
+            myPlayground[4, 8] = 'x';
+            myPlayground[2, 10] = 'x';
+            myPlayground[0, 12] = 'x';
+            
             var btnLeftMove = new Button("Move");
             btnLeftMove.Top = 4;
             btnLeftMove.Name = "btnLeftMove";
@@ -104,6 +118,7 @@ namespace FoggyConsole.Test
             leftBox.Add(chkLeftMoveDir);
             leftBox.Add(prgLeftMoveButton);
             leftBox.Add(lblLeftPrgDesc);
+            leftBox.Add(myPlayground);
             #endregion
 
             #region Right Side

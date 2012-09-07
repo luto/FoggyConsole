@@ -44,6 +44,10 @@ namespace FoggyConsole.Controls
             }
         }
 
+        /// <summary>
+        /// The char as which all characters should be rendered if <code>PasswordMode</code> is true
+        /// </summary>
+        /// <seealso cref="PasswordMode"/>
         public char PasswordChar
         {
             get { return _passwordChar; }
@@ -54,6 +58,10 @@ namespace FoggyConsole.Controls
             }
         }
 
+        /// <summary>
+        /// True if all characters should be rendered as <code>PasswordChar</code>
+        /// </summary>
+        /// <seealso cref="PasswordChar"/>
         public bool PasswordMode
         {
             get { return _passwordMode; }

@@ -138,7 +138,7 @@ namespace FoggyConsole
                     var controls = GetNearbyControls(FocusedControl,
                                                      checkTop: leftRight,
                                                      checkLeft: upDown)
-                                     .OrderBy(i => upDown ? _controls[i].Top : _controls[i].Left).ToArray();
+                                     .OrderBy(i => upDown ? _controls[i].Drawer.Boundary.Top : _controls[i].Drawer.Boundary.Left * -1).ToArray();
 
                     if (controls.Length == 0)
                         return true;
@@ -177,10 +177,15 @@ namespace FoggyConsole
         /// <returns>A list of controls nearby <paramref name="c"/></returns>
         private IEnumerable<int> GetNearbyControls(Control c, bool checkTop = false, bool checkLeft = false)
         {
+            if(c.Drawer == null)
+                yield break;
+
             for (int i = 0; i < _controls.Length; i++)
             {
-                if (c.Top  == _controls[i].Top  && checkTop ||
-                    c.Left == _controls[i].Left && checkLeft)
+                if(_controls[i].Drawer == null)
+                    continue;
+                if (c.Drawer.Boundary.Top == _controls[i].Drawer.Boundary.Top && checkTop ||
+                    c.Drawer.Boundary.Left == _controls[i].Drawer.Boundary.Left && checkLeft)
                     yield return i;
             }
         }

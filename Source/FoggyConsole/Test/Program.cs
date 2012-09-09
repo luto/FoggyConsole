@@ -56,6 +56,7 @@ namespace FoggyConsole.Test
             txtLeftText.BackColor = ConsoleColor.Gray;
             txtLeftText.ForeColor = ConsoleColor.Black;
             txtLeftText.Name = "txtLeftText";
+            txtLeftText.EnterPressed += (sender, eventArgs) => lblLeftStatusText.Text = txtLeftText.Text;
 
             var btnLeftSetText = new Button("Set this text =>");
             btnLeftSetText.Top = 3;

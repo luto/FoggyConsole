@@ -30,6 +30,7 @@ namespace FoggyConsole.Controls
         private int _cursorPosition;
         private char _passwordChar;
         private bool _passwordMode;
+        private bool _pressedEscape;
 
         /// <summary>
         /// The position of the cursor within the textbox
@@ -72,6 +73,8 @@ namespace FoggyConsole.Controls
             }
         }
 
+        public event EventHandler EnterPressed;
+
         /// <summary>
         /// Creates a new textbox
         /// </summary>
@@ -82,8 +85,20 @@ namespace FoggyConsole.Controls
         {
             if(drawer == null)
                 base.Drawer = new TextboxDrawer(this);
-            this.IsFocusedChanged += (sender, args) => RequestRedraw(RedrawRequestReason.ContentChanged);
+            this.IsFocusedChanged += OnFocusChanged;
             this.PasswordChar = '*';
+        }
+
+        protected void OnFocusChanged(object sender, EventArgs eventArgs)
+        {
+            _pressedEscape = false;
+            RequestRedraw(RedrawRequestReason.ContentChanged);
+        }
+
+        protected void OnEnterPressed()
+        {
+            if (EnterPressed != null)
+                EnterPressed(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -96,12 +111,19 @@ namespace FoggyConsole.Controls
         /// <param name="keyInfo">The keypress to handle</param>
         public bool HandleKeyInput(ConsoleKeyInfo keyInfo)
         {
+            if (_pressedEscape || keyInfo.Key == ConsoleKey.Tab)
+                return false;
+
             switch (keyInfo.Key)
             {
-                case ConsoleKey.Escape:
                 case ConsoleKey.Enter:
-                case ConsoleKey.Tab:
-                    return false;
+                    OnEnterPressed();
+                    break;
+
+                case ConsoleKey.Escape:
+                    _pressedEscape = true;
+                    IsFocused = false;
+                    break;
 
                 case ConsoleKey.RightArrow:
                     if (CursorPosition < Text.Length)
